@@ -27,4 +27,5 @@ dependencies {
     compile 'org.xutils:xutils:3.3.25'
     compile 'com.umeng.analytics:analytics:latest.integration'
     compile project(':vitamio')
+    compile 'com.google.code.gson:gson:2.6.2'
 }
