@@ -1,9 +1,12 @@
 package com.brz.system;
 
+import java.util.logging.Logger;
+
 /**
  * Created by macro on 16/4/11.
  */
 public class TerminalConfig {
+    private Logger mLogger = Logger.getLogger(TerminalConfig.class.getSimpleName());
 
     private String termId;
     private String corpId;
@@ -28,6 +31,12 @@ public class TerminalConfig {
     private String videoMaster;
     private String screenDurtion;
     private String reboot;
+
+    @Override
+    public String toString() {
+        return "termId: " + termId +
+                " corpId: " + corpId;
+    }
 
     public String getTermId() {
         return termId;

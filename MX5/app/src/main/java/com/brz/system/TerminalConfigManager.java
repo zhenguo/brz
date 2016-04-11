@@ -1,23 +1,26 @@
 package com.brz.system;
 
-import android.content.Context;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.brz.basic.Basic;
+import com.brz.utils.JsonUtil;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 
 /**
  * Created by macro on 16/4/11.
  */
 public class TerminalConfigManager {
-    private TerminalConfig mTerminalConfig;
     private static volatile TerminalConfigManager mInstance;
 
-    public static TerminalConfigManager getInstance(Context context) {
+    private TerminalConfigManager() {
+
+    }
+
+    public static TerminalConfigManager getInstance() {
         TerminalConfigManager manager = mInstance;
         if (manager == null) {
             synchronized (TerminalConfigManager.class) {
@@ -32,9 +35,32 @@ public class TerminalConfigManager {
         return mInstance;
     }
 
-    public TerminalConfig getTerminalConfig(String jsonFilePath) {
-        Gson gson = new GsonBuilder().serializeNulls().create();
-        return gson.fromJson(readFile(jsonFilePath), TerminalConfig.class);
+    public TerminalConfig getTerminalConfig() {
+        return JsonUtil.fromJson(readFile(Basic.TERMINAL_CONFIG_PATH), TerminalConfig.class);
+    }
+
+    public void updateTerminalConfig(TerminalConfig config) {
+        writeFile(Basic.TERMINAL_CONFIG_PATH, JsonUtil.toJson(config));
+    }
+
+    private void writeFile(String path, String json) {
+        BufferedWriter writer = null;
+
+        try {
+            writer = new BufferedWriter(new FileWriter(path));
+            writer.write(json);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (writer != null) {
+                try {
+                    writer.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     private String readFile(String path) {
@@ -44,7 +70,7 @@ public class TerminalConfigManager {
 
         try {
             reader = new BufferedReader(new FileReader(file));
-            String tempString = null;
+            String tempString;
             while ((tempString = reader.readLine()) != null) {
                 builder.append(tempString);
             }
