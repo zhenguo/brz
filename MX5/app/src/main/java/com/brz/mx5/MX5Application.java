@@ -1,5 +1,8 @@
 package com.brz.mx5;
 
+import com.brz.programme.ProgrammeContext;
+import com.brz.programme.ProgrammeManager;
+import com.brz.programme.Theme;
 import com.brz.system.TerminalConfig;
 import com.brz.system.TerminalConfigManager;
 
@@ -14,6 +17,7 @@ public class MX5Application extends BaseApplication {
 
     private TerminalConfigManager mTerminalConfigManager;
     private TerminalConfig mTerminalConfig;
+    private ProgrammeManager mProgrammeManager;
 
     @Override
     public void onCreate() {
@@ -24,5 +28,16 @@ public class MX5Application extends BaseApplication {
         mTerminalConfigManager = TerminalConfigManager.getInstance();
         mTerminalConfig = mTerminalConfigManager.getTerminalConfig();
         mLogger.info(mTerminalConfig.toString());
+
+        // 读取节目单信息
+        mProgrammeManager = ProgrammeManager.getInstance();
+        Theme theme = mProgrammeManager.getTheme();
+        mLogger.info("theme: " + theme.toString());
+
+        for (int i = 0; i < theme.getDefaults().size(); i++) {
+            mLogger.info("programme: " + theme.getDefaults().get(i).toString());
+        }
+
+        ProgrammeContext context = mProgrammeManager.getContext(theme.getDefaults().get(0).getName());
     }
 }
