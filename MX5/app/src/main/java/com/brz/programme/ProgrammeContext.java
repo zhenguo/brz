@@ -199,4 +199,50 @@ public class ProgrammeContext {
             return version;
         }
     }
+
+    public static class Coordinate {
+        private float left;
+        private float right;
+        private float top;
+        private float buttom;
+
+        public Coordinate(float left, float right, float top, float buttom) {
+            this.left = left;
+            this.right = right;
+            this.top = top;
+            this.buttom = buttom;
+        }
+
+        public float getLeft() {
+            return left;
+        }
+
+        public void setLeft(float left) {
+            this.left = left;
+        }
+
+        public float getRight() {
+            return right;
+        }
+
+        public void setRight(float right) {
+            this.right = right;
+        }
+
+        public float getTop() {
+            return top;
+        }
+
+        public void setTop(float top) {
+            this.top = top;
+        }
+
+        public float getButtom() {
+            return buttom;
+        }
+
+        public void setButtom(float buttom) {
+            this.buttom = buttom;
+        }
+    }
 }
