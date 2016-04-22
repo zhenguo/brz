@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.View;
 
+import com.brz.basic.Basic;
 import com.brz.mx5.R;
 import com.brz.programme.ProgrammeContext;
 import com.brz.programme.ProgrammeDefine;
@@ -11,11 +12,13 @@ import com.brz.view.VideoPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Created by macro on 16/4/14.
  */
 public class ProgrammePresenter implements ProgrammeContract.Presenter {
+    private Logger mLogger = Logger.getLogger(ProgrammePresenter.class.getSimpleName());
     private Context mContext;
     private ProgrammeContract.View mProgrammeView;
     private ProgrammeContext mProgrammeContext;
@@ -42,15 +45,17 @@ public class ProgrammePresenter implements ProgrammeContract.Presenter {
 
                     break;
                 case ProgrammeDefine.VIDEO_REGION:
+                    mLogger.info("Add VIDEO_REGION");
                     List<ProgrammeContext.Item> items = seq.getItem();
                     List<String> fileNames = new ArrayList<>();
                     for (ProgrammeContext.Item item1 : items) {
                         fileNames.add(item1.getSrc());
                     }
-                    ProgrammeContext.Coordinate coordinate = new ProgrammeContext.Coordinate(Float.parseFloat(region.getLeft()),
-                            Float.parseFloat(region.getHeight()),
-                            Float.parseFloat(region.getTop()),
-                            Float.parseFloat(region.getHeight()));
+                    ProgrammeContext.Coordinate coordinate = new ProgrammeContext.Coordinate(
+                            Float.parseFloat(region.getLeft()) * Basic.SCREEN_WIDTH / 100,
+                            Float.parseFloat(region.getWidth()) * Basic.SCREEN_WIDTH / 100,
+                            Float.parseFloat(region.getTop()) * Basic.SCREEN_HEIGHT / 100,
+                            Float.parseFloat(region.getHeight()) * Basic.SCREEN_HEIGHT / 100);
                     inflateVideo(coordinate, fileNames);
 
                     break;

@@ -1,11 +1,12 @@
 package com.brz.programme;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by macro on 16/4/12.
  */
-public class ProgrammeContext {
+public class ProgrammeContext implements Serializable {
     private String templateType;
     private Programme programme;
     private Layout layout;

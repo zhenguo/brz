@@ -1,6 +1,7 @@
 package com.brz.mx5;
 
 import com.brz.basic.Basic;
+import com.brz.programme.ProgrammeContext;
 import com.brz.programme.ProgrammeManager;
 import com.brz.programme.Theme;
 import com.brz.system.TerminalConfig;
@@ -54,6 +55,10 @@ public class MX5Application extends BaseApplication {
 
     public TerminalConfig getTerminalConfig() {
         return mTerminalConfig;
+    }
+
+    public ProgrammeContext getProgrammeContext(String fileName) {
+        return mProgrammeManager.getContext(fileName);
     }
 
     public Theme getTheme2() {

@@ -1,6 +1,7 @@
 package com.brz.view;
 
 import android.content.Context;
+import android.os.Environment;
 import android.util.AttributeSet;
 
 import java.util.ArrayList;
@@ -46,6 +47,7 @@ public class VideoPlayer extends VideoView {
             if (mVideoListQueue.isEmpty())
                 inflateQueue();
             setVideoPath(mVideoListQueue.take());
+            setVideoPath(Environment.getExternalStorageDirectory().getPath() + "/resource/test.mp4");
             start();
         } catch (InterruptedException e) {
             e.printStackTrace();
