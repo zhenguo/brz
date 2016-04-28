@@ -73,4 +73,10 @@ public class VideoPlayer extends VideoView {
 
         startPlayback();
     }
+
+    public void setLayout(float x, float y, int w, int h) {
+        setX(x);
+        setY(y);
+        getHolder().setFixedSize(w, h);
+    }
 }

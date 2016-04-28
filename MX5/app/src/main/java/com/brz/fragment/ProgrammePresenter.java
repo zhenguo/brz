@@ -77,7 +77,7 @@ public class ProgrammePresenter implements ProgrammeContract.Presenter {
 
     private void inflateVideo(ProgrammeContext.Coordinate coordinate, List<String> videoFiles) {
         VideoPlayer player = (VideoPlayer) View.inflate(mContext, R.layout.view_videoview, null);
-        player.setX(coordinate.getLeft());
+        player.setLayout(coordinate.getLeft(), coordinate.getTop(), (int) coordinate.getRight(), (int) coordinate.getButtom());
         mProgrammeView.addView(player, coordinate);
         player.setVideoList(videoFiles);
     }
