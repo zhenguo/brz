@@ -40,14 +40,17 @@ public class ProgrammePresenter implements ProgrammeContract.Presenter {
             item = list.get(i);
             ProgrammeContext.Region region = item.getRegion();
             ProgrammeContext.Seq seq = item.getSeq();
+            List<ProgrammeContext.Item> items;
+            List<String> fileNames = new ArrayList<>();
+
             switch (region.getType()) {
                 case ProgrammeDefine.BACKGROUND_REGION:
 
                     break;
                 case ProgrammeDefine.VIDEO_REGION:
                     mLogger.info("Add VIDEO_REGION");
-                    List<ProgrammeContext.Item> items = seq.getItem();
-                    List<String> fileNames = new ArrayList<>();
+                    items = seq.getItem();
+                    fileNames.clear();
                     for (ProgrammeContext.Item item1 : items) {
                         fileNames.add(item1.getSrc());
                     }
@@ -60,6 +63,17 @@ public class ProgrammePresenter implements ProgrammeContract.Presenter {
 
                     break;
                 case ProgrammeDefine.PICTURE_REGION:
+                    mLogger.info("Add PICTURE_REGION");
+                    items = seq.getItem();
+                    fileNames.clear();
+                    for (ProgrammeContext.Item item1 : items) {
+                        fileNames.add(item1.getSrc());
+                    }
+                    coordinate = new ProgrammeContext.Coordinate(
+                            Float.parseFloat(region.getLeft()) * Basic.SCREEN_WIDTH / 100,
+                            Float.parseFloat(region.getWidth()) * Basic.SCREEN_WIDTH / 100,
+                            Float.parseFloat(region.getTop()) * Basic.SCREEN_HEIGHT / 100,
+                            Float.parseFloat(region.getHeight()) * Basic.SCREEN_HEIGHT / 100);
                     break;
                 case ProgrammeDefine.TEXT_REGION:
                     break;
@@ -80,5 +94,9 @@ public class ProgrammePresenter implements ProgrammeContract.Presenter {
         player.setLayout(coordinate.getLeft(), coordinate.getTop(), (int) coordinate.getRight(), (int) coordinate.getButtom());
         mProgrammeView.addView(player, coordinate);
         player.setVideoList(videoFiles);
+    }
+
+    private void inflatePicture(ProgrammeContext.Coordinate coordinate, List<String> pictures) {
+
     }
 }
