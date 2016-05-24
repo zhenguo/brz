@@ -1,8 +1,6 @@
 package com.brz.view;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -11,13 +9,10 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.SurfaceHolder.Callback;
+import android.view.SurfaceView;
 import android.view.View;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
-
-import com.example.zhenhua.pictureandtext.R;
 
 import java.io.File;
 import java.io.FileInputStream;
