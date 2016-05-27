@@ -7,243 +7,250 @@ import java.util.List;
  * Created by macro on 16/4/12.
  */
 public class ProgrammeContext implements Serializable {
-    private String templateType;
-    private Programme programme;
-    private Layout layout;
-    private List<ContentItem> content;
+	private String templateType;
+	private Programme programme;
+	private Layout layout;
+	private List<ContentItem> content;
 
-    public String getTemplateType() {
-        return templateType;
-    }
+	public String getTemplateType() {
+		return templateType;
+	}
 
-    public Programme getProgramme() {
-        return programme;
-    }
+	public Programme getProgramme() {
+		return programme;
+	}
 
-    public Layout getLayout() {
-        return layout;
-    }
+	public Layout getLayout() {
+		return layout;
+	}
 
-    public List<ContentItem> getContent() {
-        return content;
-    }
+	public List<ContentItem> getContent() {
+		return content;
+	}
 
-    public static class ContentItem {
-        private Region region;
-        private Seq seq;
+	public static class ContentItem {
+		private Region region;
 
-        public Region getRegion() {
-            return region;
-        }
+		public Region getRegion() {
+			return region;
+		}
+	}
 
-        public Seq getSeq() {
-            return seq;
-        }
-    }
+	public static class Item {
+		private String type;
+		private String src;
+		private String size;
+		private String fileSigna;
+		private String url;
+		private String color;
+		private String mode;
+		private String startdate;
+		private String enddate;
+		private String cleardate;
+		private String duration;
+		private String transmode;
+		private String transittime;
 
-    public static class Seq {
-        private String playtime;
-        private List<Item> item;
+		public String getType() {
+			return type;
+		}
 
-        public String getPlaytime() {
-            return playtime;
-        }
+		public String getSrc() {
+			return src;
+		}
 
-        public List<Item> getItem() {
-            return item;
-        }
-    }
+		public String getSize() {
+			return size;
+		}
 
-    public static class Item {
-        private String type;
-        private String src;
-        private String size;
-        private String fileSigna;
-        private String url;
-        private String color;
-        private String mode;
-        private String startdate;
-        private String enddate;
-        private String cleardate;
+		public String getFileSigna() {
+			return fileSigna;
+		}
 
-        public String getType() {
-            return type;
-        }
+		public String getUrl() {
+			return url;
+		}
 
-        public String getSrc() {
-            return src;
-        }
+		public String getColor() {
+			return color;
+		}
 
-        public String getSize() {
-            return size;
-        }
+		public String getMode() {
+			return mode;
+		}
 
-        public String getFileSigna() {
-            return fileSigna;
-        }
+		public String getStartdate() {
+			return startdate;
+		}
 
-        public String getUrl() {
-            return url;
-        }
+		public String getEnddate() {
+			return enddate;
+		}
 
-        public String getColor() {
-            return color;
-        }
+		public String getCleardate() {
+			return cleardate;
+		}
 
-        public String getMode() {
-            return mode;
-        }
+		public String getDuration() {
+			return duration;
+		}
 
-        public String getStartdate() {
-            return startdate;
-        }
+		public String getTransmode() {
+			return transmode;
+		}
 
-        public String getEnddate() {
-            return enddate;
-        }
+		public String getTransittime() {
+			return transittime;
+		}
+	}
 
-        public String getCleardate() {
-            return cleardate;
-        }
-    }
+	public static class Region {
+		private String id;
+		private String type;
+		private String name;
+		private String model;
+		private String zindex;
+		private String left;
+		private String top;
+		private String width;
+		private String height;
+		private String playtime;
+		private List<Item> item;
 
-    public static class Region {
-        private String id;
-        private String type;
-        private String name;
-        private String model;
-        private String zindex;
-        private String left;
-        private String top;
-        private String width;
-        private String height;
+		public String getPlaytime() {
+			return playtime;
+		}
 
-        public String getId() {
-            return id;
-        }
+		public List<Item> getItem() {
+			return item;
+		}
 
-        public String getType() {
-            return type;
-        }
+		public String getId() {
+			return id;
+		}
 
-        public String getName() {
-            return name;
-        }
+		public String getType() {
+			return type;
+		}
 
-        public String getModel() {
-            return model;
-        }
+		public String getName() {
+			return name;
+		}
 
-        public String getZindex() {
-            return zindex;
-        }
+		public String getModel() {
+			return model;
+		}
 
-        public String getLeft() {
-            return left;
-        }
+		public String getZindex() {
+			return zindex;
+		}
 
-        public String getTop() {
-            return top;
-        }
+		public String getLeft() {
+			return left;
+		}
 
-        public String getWidth() {
-            return width;
-        }
+		public String getTop() {
+			return top;
+		}
 
-        public String getHeight() {
-            return height;
-        }
-    }
+		public String getWidth() {
+			return width;
+		}
 
-    public static class Layout {
-        private String width;
-        private String height;
-        private String rotate;
+		public String getHeight() {
+			return height;
+		}
+	}
 
-        public String getWidth() {
-            return width;
-        }
+	public static class Layout {
+		private String width;
+		private String height;
+		private String rotate;
 
-        public String getHeight() {
-            return height;
-        }
+		public String getWidth() {
+			return width;
+		}
 
-        public String getRotate() {
-            return rotate;
-        }
-    }
+		public String getHeight() {
+			return height;
+		}
 
-    public static class ProgrammeInfo {
-        private String id;
-        private String name;
-        private String playtime;
-        private String type;
-        private String version;
+		public String getRotate() {
+			return rotate;
+		}
+	}
 
-        public String getId() {
-            return id;
-        }
+	public static class ProgrammeInfo {
+		private String id;
+		private String name;
+		private String playtime;
+		private String type;
+		private String version;
 
-        public String getName() {
-            return name;
-        }
+		public String getId() {
+			return id;
+		}
 
-        public String getPlaytime() {
-            return playtime;
-        }
+		public String getName() {
+			return name;
+		}
 
-        public String getType() {
-            return type;
-        }
+		public String getPlaytime() {
+			return playtime;
+		}
 
-        public String getVersion() {
-            return version;
-        }
-    }
+		public String getType() {
+			return type;
+		}
 
-    public static class Coordinate {
-        private float left;
-        private float right;
-        private float top;
-        private float buttom;
+		public String getVersion() {
+			return version;
+		}
+	}
 
-        public Coordinate(float left, float right, float top, float buttom) {
-            this.left = left;
-            this.right = right;
-            this.top = top;
-            this.buttom = buttom;
-        }
+	public static class Coordinate {
+		private float left;
+		private float right;
+		private float top;
+		private float buttom;
 
-        public float getLeft() {
-            return left;
-        }
+		public Coordinate(float left, float right, float top, float buttom) {
+			this.left = left;
+			this.right = right;
+			this.top = top;
+			this.buttom = buttom;
+		}
 
-        public void setLeft(float left) {
-            this.left = left;
-        }
+		public float getLeft() {
+			return left;
+		}
 
-        public float getRight() {
-            return right;
-        }
+		public void setLeft(float left) {
+			this.left = left;
+		}
 
-        public void setRight(float right) {
-            this.right = right;
-        }
+		public float getRight() {
+			return right;
+		}
 
-        public float getTop() {
-            return top;
-        }
+		public void setRight(float right) {
+			this.right = right;
+		}
 
-        public void setTop(float top) {
-            this.top = top;
-        }
+		public float getTop() {
+			return top;
+		}
 
-        public float getButtom() {
-            return buttom;
-        }
+		public void setTop(float top) {
+			this.top = top;
+		}
 
-        public void setButtom(float buttom) {
-            this.buttom = buttom;
-        }
-    }
+		public float getButtom() {
+			return buttom;
+		}
+
+		public void setButtom(float buttom) {
+			this.buttom = buttom;
+		}
+	}
 }

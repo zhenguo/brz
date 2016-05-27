@@ -1,0 +1,190 @@
+package com.brz.view;
+
+import android.annotation.TargetApi;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.PixelFormat;
+import android.os.Build;
+import android.util.AttributeSet;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
+
+import com.brz.utils.BitmapUtil;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.BlockingDeque;
+import java.util.concurrent.LinkedBlockingDeque;
+
+/**
+ * Created by macro on 16/5/26.
+ */
+public class ImagePlayer extends SurfaceView {
+
+	public static class ImageOptions {
+
+		private String filePath;
+		private String transmode;
+		private double transittime;
+		private int duration;
+
+		public String getFilePath() {
+			return filePath;
+		}
+
+		public String getTransmode() {
+			return transmode;
+		}
+
+		public void setTransmode(String transmode) {
+			this.transmode = transmode;
+		}
+
+		public void setFilePath(String filePath) {
+			this.filePath = filePath;
+		}
+
+		public double getTransittime() {
+			return transittime;
+		}
+
+		public void setTransittime(double transittime) {
+			this.transittime = transittime;
+		}
+
+		public int getDuration() {
+			return duration;
+		}
+
+		public void setDuration(int duration) {
+			this.duration = duration;
+		}
+	}
+
+	private int mWidth;
+	private int mHeight;
+	private List<ImageOptions> mImages = new ArrayList<>();
+	private BlockingDeque<ImageOptions> mImageOptionsBlockingDeque = new LinkedBlockingDeque<>();
+	private Bitmap mCurrentBitmap;
+	private boolean mQuit;
+	private ImageAnimator mImageAnimator = new ImageAnimator();
+	private SurfaceHolder mSurfaceHolder;
+	private SurfaceHolder.Callback mCallback = new SurfaceHolder.Callback() {
+		@Override
+		public void surfaceCreated(SurfaceHolder holder) {
+			mSurfaceHolder = holder;
+		}
+
+		@Override
+		public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+			mWidth = width;
+			mHeight = height;
+			mThread.start();
+		}
+
+		@Override
+		public void surfaceDestroyed(SurfaceHolder holder) {
+
+		}
+	};
+
+	public ImagePlayer(Context context) {
+		super(context);
+		init();
+	}
+
+	public ImagePlayer(Context context, AttributeSet attrs) {
+		super(context, attrs);
+		init();
+	}
+
+	public ImagePlayer(Context context, AttributeSet attrs, int defStyleAttr) {
+		super(context, attrs, defStyleAttr);
+		init();
+	}
+
+	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
+	public ImagePlayer(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+		super(context, attrs, defStyleAttr, defStyleRes);
+		init();
+	}
+
+	private void inflateQueue() {
+		for (int i = 0; i < mImages.size(); i++) {
+			mImageOptionsBlockingDeque.add(mImages.get(i));
+		}
+	}
+
+	public void setImages(List<ImageOptions> images) {
+		mImages = images;
+		inflateQueue();
+	}
+
+	private void init() {
+		mSurfaceHolder = getHolder();
+		mSurfaceHolder.setFormat(PixelFormat.TRANSLUCENT);
+		mSurfaceHolder.addCallback(mCallback);
+	}
+
+	private Thread mThread = new Thread("show_picture") {
+		@Override
+		public void run() {
+			super.run();
+			while (true) {
+				if (mQuit)
+					break;
+				try {
+					if (mImageOptionsBlockingDeque.isEmpty())
+						inflateQueue();
+					ImageOptions options = mImageOptionsBlockingDeque.take();
+					mCurrentBitmap = BitmapUtil.decodeSampledBitmapFromFile(options.filePath,
+							mWidth, mHeight);
+					showPicture(Integer.parseInt(options.getTransmode()));
+					sleep(options.getDuration()); // milliseconds
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	};
+
+	public void quit() {
+		mQuit = true;
+	}
+
+	private void showPicture(int mode) {
+
+		switch (mode) {
+		case 0:
+			mImageAnimator.nominal(mSurfaceHolder, mCurrentBitmap);
+			break;
+		case 1:
+			mImageAnimator.window_left(mSurfaceHolder, mCurrentBitmap, getWidth(), getHeight());
+			break;
+		case 2:
+			mImageAnimator.window_right(mSurfaceHolder, mCurrentBitmap, getWidth(), getHeight());
+			break;
+		case 3:
+			mImageAnimator.window_down(mSurfaceHolder, mCurrentBitmap, getWidth(), getHeight());
+			break;
+		case 4:
+			mImageAnimator.window_up(mSurfaceHolder, mCurrentBitmap, getWidth(), getHeight());
+			break;
+		case 5:
+			mImageAnimator.black_away(mSurfaceHolder, mCurrentBitmap, getWidth(), getHeight());
+			break;
+		case 6:
+			mImageAnimator.black_in(mSurfaceHolder, mCurrentBitmap, getWidth(), getHeight());
+			break;
+		case 7:
+			mImageAnimator.clean_left(mSurfaceHolder, mCurrentBitmap, getWidth(), getHeight());
+			break;
+		case 8:
+			mImageAnimator.clean_right(mSurfaceHolder, mCurrentBitmap, getWidth(), getHeight());
+			break;
+		default:
+			break;
+
+		}
+	}
+}
