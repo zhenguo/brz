@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    buildToolsVersion "23.0.3"
 
     defaultConfig {
         applicationId "com.brz.mx5"
@@ -22,9 +22,10 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.1.1'
-    compile 'com.android.support:support-v4:23.1.1'
+    compile 'com.android.support:appcompat-v7:23.3.0'
+    compile 'com.android.support:support-v4:23.3.0'
     compile 'org.xutils:xutils:3.3.25'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
     compile 'com.umeng.analytics:analytics:latest.integration'
     compile project(':vitamio')
     compile 'com.google.code.gson:gson:2.6.2'

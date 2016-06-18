@@ -1,6 +1,7 @@
 package com.brz.fragment;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.view.View;
 
@@ -9,6 +10,7 @@ import com.brz.mx5.R;
 import com.brz.programme.ProgrammeContext;
 import com.brz.programme.ProgrammeDefine;
 import com.brz.view.ImagePlayer;
+import com.brz.view.MarqueeTextView;
 import com.brz.view.VideoPlayer;
 
 import java.util.ArrayList;
@@ -113,6 +115,13 @@ public class ProgrammePresenter implements ProgrammeContract.Presenter {
 				inflatePicture(coordinate, imageOptionsList);
 				break;
 			case ProgrammeDefine.TEXT_REGION:
+				mLogger.info("Add TEXT_REGION");
+				coordinate = new ProgrammeContext.Coordinate(Float.parseFloat(region.getLeft())
+						* Basic.SCREEN_WIDTH / 100, Float.parseFloat(region.getWidth())
+						* Basic.SCREEN_WIDTH / 100, Float.parseFloat(region.getTop())
+						* Basic.SCREEN_HEIGHT / 100, Float.parseFloat(region.getHeight())
+						* Basic.SCREEN_HEIGHT / 100);
+				inflateText(coordinate);
 				break;
 			case ProgrammeDefine.WEATHER_REGION:
 				break;
@@ -141,5 +150,15 @@ public class ProgrammePresenter implements ProgrammeContract.Presenter {
 		ImagePlayer player = (ImagePlayer) View.inflate(mContext, R.layout.view_imageview, null);
 		player.setImages(pictures);
 		mProgrammeView.addView(player, coordinate);
+	}
+
+	private void inflateText(ProgrammeContext.Coordinate coordinate) {
+		MarqueeTextView view = (MarqueeTextView) View.inflate(mContext,
+				R.layout.view_marquee_textview, null);
+		view.setTextSize(40);
+		view.setSpeed(5f);
+		view.setTypeface(Typeface.DEFAULT_BOLD);
+		view.setText("高并发、高实时的视频云服务系统架构设计及研发，提供网络直播、视频会议、视频聊天等视频业");
+		mProgrammeView.addView(view, coordinate);
 	}
 }

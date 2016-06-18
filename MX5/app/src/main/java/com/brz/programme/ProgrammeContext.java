@@ -116,6 +116,11 @@ public class ProgrammeContext implements Serializable {
 		private String height;
 		private String playtime;
 		private List<Item> item;
+		private String bold;
+		private String color;
+		private String family;
+		private String font_size;
+		private String style;
 
 		public String getPlaytime() {
 			return playtime;
@@ -159,6 +164,26 @@ public class ProgrammeContext implements Serializable {
 
 		public String getHeight() {
 			return height;
+		}
+
+		public String getBold() {
+			return bold;
+		}
+
+		public String getColor() {
+			return color;
+		}
+
+		public String getFamily() {
+			return family;
+		}
+
+		public String getFont_size() {
+			return font_size;
+		}
+
+		public String getStyle() {
+			return style;
 		}
 	}
 
