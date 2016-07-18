@@ -50,6 +50,13 @@ public class ProgrammeFragment extends BasicFragment implements ProgrammeContrac
 	}
 
 	@Override
+	public void removeView(View view) {
+		if (mContainer != null) {
+			mContainer.removeView(view);
+		}
+	}
+
+	@Override
 	public void setBackground(String url) {
 		mLogger.info("setBackground");
 		if (mContainer != null) {

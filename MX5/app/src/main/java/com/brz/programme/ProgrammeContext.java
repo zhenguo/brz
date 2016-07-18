@@ -37,6 +37,12 @@ public class ProgrammeContext implements Serializable {
 	}
 
 	public static class Item {
+		private String bgcolor;
+		private String bgmix;
+		private String direction;
+		private String face;
+		private String font_size;
+		private String speed;
 		private String type;
 		private String src;
 		private String size;
@@ -101,6 +107,30 @@ public class ProgrammeContext implements Serializable {
 
 		public String getTransittime() {
 			return transittime;
+		}
+
+		public String getBgcolor() {
+			return bgcolor;
+		}
+
+		public String getBgmix() {
+			return bgmix;
+		}
+
+		public String getDirection() {
+			return direction;
+		}
+
+		public String getFace() {
+			return face;
+		}
+
+		public String getFont_size() {
+			return font_size;
+		}
+
+		public String getSpeed() {
+			return speed;
 		}
 	}
 

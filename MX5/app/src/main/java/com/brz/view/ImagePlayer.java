@@ -9,20 +9,24 @@ import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.brz.listener.OnCompletionListener;
 import com.brz.utils.BitmapUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.logging.Logger;
 
 /**
  * Created by macro on 16/5/26.
  */
 public class ImagePlayer extends SurfaceView {
 
-	public static class ImageOptions {
+	private static final String TAG = "ImagePlayer";
+	private Logger mLogger = Logger.getLogger(TAG);
 
+	public static class ImageOptions {
 		private String filePath;
 		private String transmode;
 		private double transittime;
@@ -68,6 +72,7 @@ public class ImagePlayer extends SurfaceView {
 	private Bitmap mCurrentBitmap;
 	private boolean mQuit;
 	private ImageAnimator mImageAnimator = new ImageAnimator();
+	private OnCompletionListener mOnCompletionListener;
 	private SurfaceHolder mSurfaceHolder;
 	private SurfaceHolder.Callback mCallback = new SurfaceHolder.Callback() {
 		@Override
@@ -84,9 +89,13 @@ public class ImagePlayer extends SurfaceView {
 
 		@Override
 		public void surfaceDestroyed(SurfaceHolder holder) {
-
+			mLogger.info("surfaceDestroyed");
 		}
 	};
+
+	public void setOnCompletionListener(OnCompletionListener listener) {
+		mOnCompletionListener = listener;
+	}
 
 	public ImagePlayer(Context context) {
 		super(context);
@@ -134,13 +143,23 @@ public class ImagePlayer extends SurfaceView {
 				if (mQuit)
 					break;
 				try {
-					if (mImageOptionsBlockingDeque.isEmpty())
-						inflateQueue();
+					if (mImageOptionsBlockingDeque.isEmpty()) {
+						if (mOnCompletionListener != null) {
+							if (!mOnCompletionListener.onCompletion(OnCompletionListener.LEVEL_IMAGE)) {
+								inflateQueue();
+							} else {
+								mLogger.info("time to switch to next programme.");
+								break;
+							}
+						}
+					}
+
 					ImageOptions options = mImageOptionsBlockingDeque.take();
 					mCurrentBitmap = BitmapUtil.decodeSampledBitmapFromFile(options.filePath,
 							mWidth, mHeight);
 					showPicture(Integer.parseInt(options.getTransmode()));
-					sleep(options.getDuration()); // milliseconds
+					mLogger.info("sleep: " + options.getDuration());
+					sleep(options.getDuration() * 1000); // milliseconds
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -153,6 +172,8 @@ public class ImagePlayer extends SurfaceView {
 	}
 
 	private void showPicture(int mode) {
+
+		mLogger.info("mode: " + mode);
 
 		switch (mode) {
 		case 0:

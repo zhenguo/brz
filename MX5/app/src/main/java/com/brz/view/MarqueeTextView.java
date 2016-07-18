@@ -12,88 +12,195 @@ import android.view.View;
 
 import com.brz.mx5.R;
 
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Logger;
 
 /**
  * Created by macro on 16/6/7.
  */
 public class MarqueeTextView extends View {
-	private static final String TAG = "MarqueeTextView";
-	private Logger mLogger = Logger.getLogger(TAG);
-	private Paint mPaint;
-	private String mText;
-	private float mTextWidth;
-	private float mSpeed;
-	private float mStep;
 
-	public MarqueeTextView(Context context) {
-		super(context);
+    public static class TextViewOptions {
+        private String bgcolor;
+        private String bgmix;
+        private String color;
+        private String direction;
+        private String face;
+        private String font_size;
+        private String size;
+        private String speed;
+        private String content;
 
-		init();
-	}
+        public String getBgcolor() {
+            return bgcolor;
+        }
 
-	public MarqueeTextView(Context context, AttributeSet attrs) {
-		super(context, attrs);
+        public String getBgmix() {
+            return bgmix;
+        }
 
-		init();
-	}
+        public String getColor() {
+            return color;
+        }
 
-	public MarqueeTextView(Context context, AttributeSet attrs, int defStyleAttr) {
-		super(context, attrs, defStyleAttr);
+        public String getDirection() {
+            return direction;
+        }
 
-		init();
-	}
+        public String getFace() {
+            return face;
+        }
 
-	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
-	public MarqueeTextView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-		super(context, attrs, defStyleAttr, defStyleRes);
+        public String getFont_size() {
+            return font_size;
+        }
 
-		init();
-	}
+        public String getSize() {
+            return size;
+        }
 
-	private void init() {
-		setWillNotDraw(false);
-		mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		setLayerType(LAYER_TYPE_HARDWARE, mPaint);
-		mPaint.setColor(Color.WHITE);
-		mStep = 0f;
-		setBackgroundColor(getResources().getColor(R.color.black_overlay));
-	}
+        public String getSpeed() {
+            return speed;
+        }
 
-	public void setTypeface(Typeface typeface) {
-		mPaint.setTypeface(typeface);
-	}
+        public void setBgcolor(String bgcolor) {
+            this.bgcolor = bgcolor;
+        }
 
-	public void setTextSize(float textSize) {
-		mPaint.setTextSize(textSize);
-	}
+        public void setBgmix(String bgmix) {
+            this.bgmix = bgmix;
+        }
 
-	public void setSpeed(float speed) {
-		mSpeed = speed;
-	}
+        public void setColor(String color) {
+            this.color = color;
+        }
 
-	public final void setText(String text) {
-		mText = text;
-		mTextWidth = mPaint.measureText(mText);
-	}
+        public void setDirection(String direction) {
+            this.direction = direction;
+        }
 
-	@Override
-	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-		super.onSizeChanged(w, h, oldw, oldh);
-		mStep = getRight();
-	}
+        public void setFace(String face) {
+            this.face = face;
+        }
 
-	@Override
-	protected void onDraw(Canvas canvas) {
-		super.onDraw(canvas);
+        public void setFont_size(String font_size) {
+            this.font_size = font_size;
+        }
 
-		canvas.drawText(mText, 0, mText.length(), mStep,
-				getTop() + getHeight() / 2 + mPaint.getTextSize() / 2, mPaint);
-		mStep -= mSpeed;
+        public void setSize(String size) {
+            this.size = size;
+        }
 
-		if (Math.abs(mStep) > getWidth())
-			mStep = getRight();
+        public void setSpeed(String speed) {
+            this.speed = speed;
+        }
 
-		postInvalidateDelayed(20);
-	}
+        public String getContent() {
+            return content;
+        }
+
+        public void setContent(String content) {
+            this.content = content;
+        }
+    }
+
+    private static final String TAG = "MarqueeTextView";
+    private Logger mLogger = Logger.getLogger(TAG);
+    private Paint mPaint;
+    private String mText;
+    private float mTextWidth;
+    private float mSpeed;
+    private float mStep;
+    private Timer mTimer;
+
+    public MarqueeTextView(Context context) {
+        super(context);
+
+        init();
+    }
+
+    public MarqueeTextView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+
+        init();
+    }
+
+    public MarqueeTextView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+
+        init();
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public MarqueeTextView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+
+        init();
+    }
+
+    private void init() {
+        setWillNotDraw(false);
+        mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        setLayerType(LAYER_TYPE_HARDWARE, mPaint);
+        mStep = 0f;
+        setBackgroundColor(getResources().getColor(R.color.black_overlay));
+    }
+
+    public void setTypeface(Typeface typeface) {
+        mPaint.setTypeface(typeface);
+    }
+
+    public void setTextSize(float textSize) {
+        mPaint.setTextSize(textSize);
+    }
+
+    public void setSpeed(float speed) {
+        mSpeed = speed;
+    }
+
+    public final void setTextColor(String color) {
+        mPaint.setColor(Color.parseColor(color));
+    }
+
+    public final void setText(String text) {
+        mText = text;
+        mTextWidth = mPaint.measureText(mText);
+    }
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        mStep = getRight();
+    }
+
+    public void startMarquee() {
+        mTimer = new Timer("marquee_text_timer");
+        mTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                postInvalidate();
+            }
+        }, 0, 100);
+    }
+
+    public void stopMarquee() {
+        if (mTimer != null) {
+            mTimer.cancel();
+            mTimer.purge();
+            mTimer = null;
+        }
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+
+        canvas.drawText(mText, 0, mText.length(), mStep,
+                getTop() + getHeight() / 2 + mPaint.getTextSize() / 2, mPaint);
+        mStep -= mSpeed;
+
+        if (Math.abs(mStep) > getWidth())
+            mStep = getRight();
+    }
 }

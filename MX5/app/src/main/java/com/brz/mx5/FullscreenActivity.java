@@ -7,14 +7,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import com.brz.fragment.ProgrammeFragment;
-import com.brz.fragment.ProgrammePresenter;
-import com.brz.programme.Programme;
-import com.brz.programme.ProgrammeContext;
-import com.brz.programme.Theme;
-
-import java.util.List;
-
 import io.vov.vitamio.Vitamio;
 
 /**
@@ -22,10 +14,7 @@ import io.vov.vitamio.Vitamio;
  * status bar and navigation/system bar) with user interaction.
  */
 public class FullscreenActivity extends AppCompatActivity {
-
-	private ProgrammeContext mProgrammeContext;
-	private ProgrammeFragment mFragment;
-
+	private DisplayManager mDisplayManager;
 	private final Handler mHideHandler = new Handler();
 	private View mContentView;
 	private final Runnable mHidePart2Runnable = new Runnable() {
@@ -55,21 +44,14 @@ public class FullscreenActivity extends AppCompatActivity {
 		mContentView = findViewById(R.id.fullscreen_content);
 		hide();
 
-		Theme theme = MX5Application.getInstance().getTheme2();
-		List<Programme> programmeList = theme.getDefaults();
-
-		mProgrammeContext = MX5Application.getInstance().getProgrammeContext(
-				programmeList.get(0).getFileSigna() + ".json");
-		mFragment = new ProgrammeFragment();
-		getSupportFragmentManager().beginTransaction().replace(R.id.fullscreen_content, mFragment)
-				.commit();
+		mDisplayManager = new DisplayManager(this);
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
 
-		new ProgrammePresenter(this, mProgrammeContext, mFragment);
+		mDisplayManager.display();
 	}
 
 	private void hide() {

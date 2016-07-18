@@ -3,6 +3,8 @@ package com.brz.view;
 import android.content.Context;
 import android.util.AttributeSet;
 
+import com.brz.listener.OnCompletionListener;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -19,6 +21,7 @@ public class VideoPlayer extends VideoView {
 	private static final String TAG = "VideoPlayer";
 	private Logger mLogger = Logger.getLogger(TAG);
 	private List<String> mVideoList = new ArrayList<>();
+	private OnCompletionListener mOnCompletionListener;
 	private BlockingQueue<String> mVideoListQueue = new LinkedBlockingDeque<>();
 
 	public VideoPlayer(Context context) {
@@ -33,6 +36,10 @@ public class VideoPlayer extends VideoView {
 		super(context, attrs, defStyle);
 	}
 
+	public void setOnCompletionListener(OnCompletionListener listener) {
+		mOnCompletionListener = listener;
+	}
+
 	public void setVideoList(List<String> videoList) {
 		mVideoList = videoList;
 		init();
@@ -45,8 +52,18 @@ public class VideoPlayer extends VideoView {
 
 	private void startPlayback() {
 		try {
-			if (mVideoListQueue.isEmpty())
-				inflateQueue();
+			if (mVideoListQueue.isEmpty()) { // playlist has been through
+				if (mOnCompletionListener != null) {
+					if (mOnCompletionListener.onCompletion(OnCompletionListener.LEVEL_VIDEO)) {
+						mLogger.info("stopPlayback video.");
+						stopPlayback();
+						return;
+					} else {
+						inflateQueue(); // not processed, continue play
+					}
+				}
+			}
+
 			setVideoPath(mVideoListQueue.take());
 			start();
 		} catch (InterruptedException e) {
@@ -78,7 +95,8 @@ public class VideoPlayer extends VideoView {
 			}
 		});
 
+		inflateQueue();
+
 		startPlayback();
 	}
-
 }
