@@ -32,4 +32,12 @@ public class Status {
     public void setDownloadStatue(String downloadStatue) {
         this.downloadStatue = downloadStatue;
     }
+
+    public void setSystemState(String systemState) {
+        this.systemState = systemState;
+    }
+
+    public void setHardware(Hardware hardware) {
+        this.hardware = hardware;
+    }
 }

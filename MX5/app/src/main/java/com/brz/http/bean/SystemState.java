@@ -23,7 +23,7 @@ public enum  SystemState {
         mValue = code;
     }
 
-    public static String getValue(SystemState state) {
-        return state.mValue;
+    public String getValue() {
+        return mValue;
     }
 }

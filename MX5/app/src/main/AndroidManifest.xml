@@ -28,6 +28,11 @@
             </intent-filter>
         </activity>
 
+        <service android:name="com.brz.service.SignalService">
+            <intent-filter>
+                <action android:name="android.intent.action.RESPOND_VIA_MESSAGE"/>
+            </intent-filter>
+        </service>
         <!--友盟配置-->
         <meta-data
             android:name="UMENG_APPKEY"

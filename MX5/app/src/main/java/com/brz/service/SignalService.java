@@ -10,9 +10,21 @@ import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
+import com.brz.http.bean.Cmd;
+import com.brz.http.bean.CmdData;
+import com.brz.http.bean.Hardware;
+import com.brz.http.bean.RequestBody;
+import com.brz.http.bean.Response;
+import com.brz.http.bean.Status;
+import com.brz.http.bean.SystemState;
 import com.brz.http.service.TerminalService;
 import com.brz.mx5.R;
+import com.brz.utils.SystemUtil;
+
+import retrofit2.Call;
+import retrofit2.Callback;
 
 /**
  * Created by macro on 16/7/18.
@@ -40,7 +52,8 @@ public class SignalService extends Service {
                 switch (msg.what) {
                     case MSG_HEARTBEAT:
                         break;
-                    default:break;
+                    default:
+                        break;
                 }
             }
         };
@@ -75,9 +88,17 @@ public class SignalService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
         if (intent != null) {
-            mTermId = intent.getStringExtra(EXTRA_PARAM_TERM_ID);
-            mHandler.sendEmptyMessage(MSG_HEARTBEAT);
+            Log.d(TAG, "action: " + intent.getAction());
+            String action = intent.getAction();
+            switch (action) {
+                case TerminalConstants.ACTION_GET_TERMINAL_ID:
+                    getTermId();
+                    break;
+                default:
+                    break;
+            }
         }
 
         return START_STICKY;
@@ -94,6 +115,47 @@ public class SignalService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         return null;
+    }
+
+    public void getTermId() {
+        Log.d(TAG, "getTermId");
+        Status status = new Status();
+        status.setSystemState(SystemState.ID_NOT_ASSIGN.getValue());
+        Hardware hardware = new Hardware();
+        hardware.setMac(SystemUtil.getHardwareAddress(SignalService.this));
+        status.setHardware(hardware);
+
+        Cmd cmd = new Cmd();
+        cmd.setCmdType(CmdType.GET_TERM_ID);
+
+
+
+        RequestBody body = new RequestBody("", status, cmd);
+        mService.getTermId(body, new Callback<Response>() {
+            @Override
+            public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
+                try {
+                    Response response1 = response.body();
+                    if (response1 != null) {
+                        Cmd cmd1 = response1.getCmd();
+                        if (cmd1 != null) {
+                            CmdData cmdData = cmd1.getCmdData();
+                            if (cmdData != null) {
+                                mTermId = cmdData.getTermId();
+                                Log.d(TAG, "mTermId: " + mTermId);
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Response> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
     }
 
     public void doHeartBeat() {

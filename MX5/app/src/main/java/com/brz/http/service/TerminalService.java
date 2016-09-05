@@ -1,6 +1,7 @@
 package com.brz.http.service;
 
 import com.brz.http.bean.Cmd;
+import com.brz.http.bean.RequestBody;
 import com.brz.http.bean.Response;
 import com.brz.http.bean.Status;
 
@@ -8,8 +9,10 @@ import java.util.logging.Logger;
 
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 
 /**
@@ -36,11 +39,11 @@ public class TerminalService extends HttpService {
     }
 
     public interface Terminal {
-        @FormUrlEncoded
+        @Headers({
+                "content-type: application/json"
+        })
         @POST("TerminalService/getkey.do")
-        Call<Response> getTerminalId(@Field("termId") String termId,
-                                     @Field("status") Status status,
-                                     @Field("cmd") Cmd cmd);
+        Call<Response> getTerminalId(@Body RequestBody requestBody);
 
         @POST("TerminalService/transmission.do")
         Call<Response> postTransmission(@Field("termId") String termId, @Field("seq") String seq, @Field("status") Status status, @Field("cmd") Cmd cmd);
@@ -53,6 +56,12 @@ public class TerminalService extends HttpService {
         @FormUrlEncoded
         @POST("TerminalService/screenshots.do")
         Call<Void> sendScreenShots(@Field("termId") String termId, @Field("cmd") Cmd cmd);
+    }
+
+    public void getTermId(RequestBody requestBody, Callback<Response> callback) {
+        Terminal terminal = mRetrofit.create(Terminal.class);
+        Call<Response> call = terminal.getTerminalId(requestBody);
+        call.enqueue(callback);
     }
 
     public void heartBeat(String termId, Status status, Cmd cmd, Callback<Response> callback) {

@@ -9,7 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class HttpService {
     protected Retrofit mRetrofit;
-    public static final String BSQ_URL = "http://139.129.98.83:8080/tmms/tmms";
+    public static final String BSQ_URL = "http://139.129.98.83:8080/tmms/tmms/";
 
     public HttpService(String url) {
         mRetrofit = new Retrofit.Builder()

@@ -14,4 +14,12 @@ public class Cmd {
     public CmdData getCmdData() {
         return cmdData;
     }
+
+    public void setCmdType(String cmdType) {
+        this.cmdType = cmdType;
+    }
+
+    public void setCmdData(CmdData cmdData) {
+        this.cmdData = cmdData;
+    }
 }
