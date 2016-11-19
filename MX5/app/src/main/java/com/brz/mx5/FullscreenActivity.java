@@ -1,18 +1,15 @@
 package com.brz.mx5;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
+
+import com.brz.utils.PermissionUtil;
 
 import io.vov.vitamio.Vitamio;
 
@@ -56,45 +53,12 @@ public class FullscreenActivity extends AppCompatActivity {
             mDisplayManager = new DisplayManager(this);
     }
 
+
     @Override
     protected void onStart() {
         super.onStart();
 
-        boolean readExternalStorageDenied = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED;
-        boolean writeExternalStorageDenied = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED;
-
-        Log.d(TAG, "readExternalStorageDenied: " + readExternalStorageDenied);
-        Log.d(TAG, "writeExternalStorageDenied: " + writeExternalStorageDenied);
-
-        // Here, thisActivity is the current activity
-        if (readExternalStorageDenied || writeExternalStorageDenied) {
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.READ_EXTERNAL_STORAGE) ||
-                    ActivityCompat.shouldShowRequestPermissionRationale(this,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-
-                // Show an expanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-
-            } else {
-
-                // No explanation needed, we can request the permission.
-
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        0);
-
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
-            }
-        }
+        PermissionUtil.grantePermission(this);
     }
 
     @Override

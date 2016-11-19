@@ -78,8 +78,8 @@ public class TerminalConfigManager {
             e.printStackTrace();
         } finally {
             try {
-                assert reader != null;
-                reader.close();
+                if (reader != null)
+                    reader.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
