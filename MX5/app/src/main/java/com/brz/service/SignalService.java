@@ -129,7 +129,6 @@ public class SignalService extends Service {
         cmd.setCmdType(CmdType.GET_TERM_ID);
 
 
-
         RequestBody body = new RequestBody("", status, cmd);
         mService.getTermId(body, new Callback<Response>() {
             @Override
