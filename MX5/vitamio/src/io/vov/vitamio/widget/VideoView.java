@@ -86,10 +86,11 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
 	OnVideoSizeChangedListener mSizeChangedListener = new OnVideoSizeChangedListener() {
 		public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
       Log.d("onVideoSizeChanged: (%dx%d)", width, height);
-//      mVideoWidth = mp.getVideoWidth();
-//      mVideoHeight = mp.getVideoHeight();
-            mVideoWidth = getWidth();
-            mVideoHeight = getHeight();
+      //mVideoWidth = mp.getVideoWidth();
+      //mVideoHeight = mp.getVideoHeight();
+      mVideoWidth = getWidth();
+      mVideoHeight = getHeight();
+
       mVideoAspectRatio = mp.getVideoAspectRatio();
       if (mVideoWidth != 0 && mVideoHeight != 0)
         setVideoLayout(mVideoLayout, mAspectRatio);
@@ -98,10 +99,6 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
   OnPreparedListener mPreparedListener = new OnPreparedListener() {
     public void onPrepared(MediaPlayer mp) {
       Log.d("onPrepared");
-			if (false) {
-				stopPlayback();
-				return;
-			}
 			mCurrentState = STATE_PREPARED;
 			// mTargetState = STATE_PLAYING;
 
@@ -112,10 +109,11 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
         mOnPreparedListener.onPrepared(mMediaPlayer);
       if (mMediaController != null)
         mMediaController.setEnabled(true);
-//      mVideoWidth = mp.getVideoWidth();
-//      mVideoHeight = mp.getVideoHeight();
-        mVideoWidth = getWidth();
-        mVideoHeight = getHeight();
+      //mVideoWidth = mp.getVideoWidth();
+      //mVideoHeight = mp.getVideoHeight();
+      mVideoWidth = getWidth();
+      mVideoHeight = getHeight();
+
       mVideoAspectRatio = mp.getVideoAspectRatio();
 
       long seekToPosition = mSeekWhenPrepared;
@@ -441,14 +439,7 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
 			mMediaPlayer.setOnInfoListener(mInfoListener);
 			mMediaPlayer.setOnSeekCompleteListener(mSeekCompleteListener);
 			mMediaPlayer.setOnTimedTextListener(mTimedTextListener);
-			
-			Log.d(" set user optional --------  ");
-			HashMap<String, String> options = new HashMap<String, String>();
-			options.put("rtsp_transport", "tcp"); // udp
-		//	options.put("user-agent", "userAgent");
-		//	options.put("cookies", "cookies");
-			options.put("analyzeduration", "1000000");
-			mMediaPlayer.setDataSource(mContext, mUri, options);
+            mMediaPlayer.setDataSource(mContext, mUri, mHeaders);
 
 			mMediaPlayer.setDisplay(mSurfaceHolder);
 			mMediaPlayer.setBufferSize(mBufSize);

@@ -38,14 +38,11 @@ public class VideoViewDemo extends Activity {
 	 * path.
 	 */
 
-	boolean ifUpdate;;
-	
-
 	@Override
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 
-		Vitamio.isInitialized(this);
+		Vitamio.isInitialized(getApplicationContext());
 		
 		setContentView(R.layout.videoview);
 
@@ -56,13 +53,12 @@ public class VideoViewDemo extends Activity {
 	
 	void playfunction(){
 		 String path = "";
+
 		 VideoView mVideoView;
 		 EditText mEditText;
 		mEditText = (EditText) findViewById(R.id.url);
 		mVideoView = (VideoView) findViewById(R.id.surface_view);
-
-		path="http://dlqncdn.miaopai.com/stream/MVaux41A4lkuWloBbGUGaQ__.mp4";
-      if (path == "") {
+		if (path == "") {
 			// Tell the user to provide a media file URL/path.
 			Toast.makeText(VideoViewDemo.this, "Please edit VideoViewDemo Activity, and set path" + " variable to your media file URL/path", Toast.LENGTH_LONG).show();
 			return;

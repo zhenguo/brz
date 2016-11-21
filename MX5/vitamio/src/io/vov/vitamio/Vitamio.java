@@ -16,7 +16,6 @@
 
 package io.vov.vitamio;
 
-
 import android.content.Context;
 
 import io.vov.vitamio.utils.CPU;

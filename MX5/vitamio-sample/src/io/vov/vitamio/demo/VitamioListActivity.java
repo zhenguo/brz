@@ -30,8 +30,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.umeng.analytics.MobclickAgent;
-
 /**
  * List
  */
@@ -68,18 +66,6 @@ public class VitamioListActivity extends ListActivity {
 		Map<String, Object> map = (Map<String, Object>) l.getItemAtPosition(position);
 		Intent intent = (Intent) map.get("intent");
 		startActivity(intent);
-	}
-	
-	@Override
-	protected void onResume() {
-	 MobclickAgent.onResume(this);
-	  super.onResume();
-	}
-	
-	@Override
-	protected void onPause() {
-		MobclickAgent.onPause(this);
-	  super.onPause();
 	}
 
 }
