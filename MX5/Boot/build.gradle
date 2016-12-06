@@ -1,0 +1,112 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 19
+    buildToolsVersion "20.0.0"
+    defaultConfig {
+        minSdkVersion 19
+        versionCode 2087
+        versionName "2.0.0.2087"
+        if (project.hasProperty("VERSION_CODE")) {
+            if (!project.property("VERSION_CODE").equals("0")) {
+                versionCode Integer.valueOf(project.property("VERSION_CODE"))
+            }
+        }
+        if (project.hasProperty("VERSION_NAME")) {
+            if (!project.property("VERSION_NAME").equals("0")) {
+                versionName project.property("VERSION_NAME")
+            }
+        }
+        if (project.hasProperty("LOG_ENABLED")) {
+            buildTypes {
+                debug {
+                    buildConfigField "boolean", "LOG_ENABLED", project.property("LOG_ENABLED")
+                }
+                release {
+                    buildConfigField "boolean", "LOG_ENABLED", project.property("LOG_ENABLED")
+                }
+            }
+        }
+    }
+    android.applicationVariants.all { variant ->
+        variant.outputs.each {
+            def file = it.outputFile
+            it.outputFile = new File(file.parent, file.name.replace(".apk", "-${variant.versionName}.apk"))
+        }
+    }
+
+    signingConfigs{
+        myConfig{
+            storeFile file("../roobo-rel.keystore")
+            storePassword "juan3652014"
+            keyAlias "roobo.keys"
+            keyPassword "roobo2014"
+        }
+        platformConfig{
+
+        }
+    }
+    buildTypes{
+        release {
+            minifyEnabled true
+            proguardFile file("../proguard-android.txt")
+            def propsFile = file("/home/ubuntu/keystore.properties")
+            if (propsFile.exists()) {
+                def props = new Properties();
+                props.load(new FileInputStream(propsFile))
+                signingConfigs.platformConfig.storeFile = file(props['storeFile'])
+                signingConfigs.platformConfig.storePassword = props['storePassword']
+                signingConfigs.platformConfig.keyAlias = props['keyAlias']
+                signingConfigs.platformConfig.keyPassword = props['keyPassword']
+                signingConfig  signingConfigs.platformConfig
+            } else {
+                signingConfig  signingConfigs.myConfig
+            }
+
+        }
+        debug {
+            minifyEnabled false
+            proguardFile file("../proguard-android.txt")
+            signingConfig  signingConfigs.myConfig
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    dexOptions {
+        preDexLibraries = false
+    }
+
+    sourceSets {
+        main {
+            jniLibs.srcDir('libs')
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = ['src']
+            resources.srcDirs = ['src']
+            aidl.srcDirs = ['src']
+            renderscript.srcDirs = ['src']
+            res.srcDirs = ['res']
+            assets.srcDirs = ['assets']
+        }
+
+        // Move the tests to tests/java, tests/res, etc...
+        instrumentTest.setRoot('tests')
+
+        debug.setRoot('build-types/debug')
+        release.setRoot('build-types/release')
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+//    compile project(':LogService')
+//    testCompile 'junit:junit:4.12'
+//    compile 'com.android.support:appcompat-v7:23.1.0'
+}

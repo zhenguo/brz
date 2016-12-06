@@ -7,12 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.view.View;
-import io.vov.vitamio.Vitamio;
 
-/**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
- */
 public class FullscreenActivity extends PermissionsActivity {
   private static final String TAG = "FullscreenActivity";
   private static final int REQUEST_PERMISSION_RWS = 0x1001;
