@@ -3,7 +3,6 @@ package com.brz.mx5;
 import android.content.Intent;
 import com.brz.basic.Basic;
 import com.brz.service.SignalService;
-import com.brz.service.TerminalConstants;
 import java.util.logging.Logger;
 
 /**
@@ -22,7 +21,7 @@ public class MX5Application extends BaseApplication {
 
     // 启动SignalService, 获取终端ID
     mLogger.info("start signal service...");
-    Intent intent = new Intent(TerminalConstants.ACTION_GET_TERMINAL_ID);
+    Intent intent = new Intent();
     intent.setClass(this, SignalService.class);
     startService(intent);
 

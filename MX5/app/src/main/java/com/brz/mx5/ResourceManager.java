@@ -14,8 +14,8 @@ import java.util.logging.Logger;
 public class ResourceManager {
   private static final String TAG = "ResourceManager";
 
-  private static class SingleHolder {
-    public static ResourceManager instance = new ResourceManager();
+  private static class SingletonHolder {
+    static ResourceManager instance = new ResourceManager();
   }
 
   private Logger mLogger = Logger.getLogger(TAG);
@@ -26,7 +26,7 @@ public class ResourceManager {
   private Theme mTheme;
 
   public static ResourceManager getInstance() {
-    return SingleHolder.instance;
+    return SingletonHolder.instance;
   }
 
   public ResourceManager() {

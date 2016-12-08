@@ -19,4 +19,8 @@ public class Response {
     public Cmd getCmd() {
         return cmd;
     }
+
+    @Override public String toString() {
+        return "message: " + message + " seq: " + seq + " cmd: " + cmd.toString();
+    }
 }

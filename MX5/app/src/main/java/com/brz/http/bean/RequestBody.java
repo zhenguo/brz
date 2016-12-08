@@ -4,37 +4,67 @@ package com.brz.http.bean;
  * Created by macro on 16/7/20.
  */
 public class RequestBody {
-    private String termId;
-    private Status status;
-    private Cmd cmd;
+  public static class Builder {
+    private RequestBody out = new RequestBody();
 
-    public RequestBody(String t, Status s, Cmd c) {
-        termId = t;
-        status = s;
-        cmd = c;
+    public Builder setTermId(String id) {
+      out.setTermId(id);
+
+      return this;
     }
 
-    public String getTermId() {
-        return termId;
+    public Builder setStatus(Status status) {
+      out.setStatus(status);
+
+      return this;
     }
 
-    public void setTermId(String termId) {
-        this.termId = termId;
+    public Builder setCmd(Cmd cmd) {
+      out.setCmd(cmd);
+
+      return this;
     }
 
-    public Status getStatus() {
-        return status;
+    public RequestBody build() {
+      return out;
     }
+  }
 
-    public void setStatus(Status status) {
-        this.status = status;
-    }
+  private String termId;
+  private Status status;
+  private Cmd cmd;
 
-    public Cmd getCmd() {
-        return cmd;
-    }
+  public RequestBody() {
 
-    public void setCmd(Cmd cmd) {
-        this.cmd = cmd;
-    }
+  }
+
+  public RequestBody(String t, Status s, Cmd c) {
+    termId = t;
+    status = s;
+    cmd = c;
+  }
+
+  public String getTermId() {
+    return termId;
+  }
+
+  public void setTermId(String termId) {
+    this.termId = termId;
+  }
+
+  public Status getStatus() {
+    return status;
+  }
+
+  public void setStatus(Status status) {
+    this.status = status;
+  }
+
+  public Cmd getCmd() {
+    return cmd;
+  }
+
+  public void setCmd(Cmd cmd) {
+    this.cmd = cmd;
+  }
 }

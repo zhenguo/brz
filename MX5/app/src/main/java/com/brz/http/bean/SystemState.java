@@ -3,7 +3,7 @@ package com.brz.http.bean;
 /**
  * Created by macro on 16/7/16.
  */
-public enum  SystemState {
+public enum SystemState {
 
     BOOT_COMPLETE("1000"),
     WORKING("1001"),

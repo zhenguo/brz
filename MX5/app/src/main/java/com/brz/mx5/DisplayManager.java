@@ -46,6 +46,19 @@ public class DisplayManager implements OnCompletionListener {
     initProgramme();
   }
 
+  public void updateProgramme() {
+    mFragment = new ProgrammeFragment();
+    mActivity.getSupportFragmentManager()
+        .beginTransaction()
+        .replace(R.id.fullscreen_content, mFragment)
+        .commit();
+    display();
+  }
+
+  public void interceptProgramme() {
+
+  }
+
   private void initProgramme() {
     Theme theme = ResourceManager.getInstance().getTheme2();
     mProgrammeList = theme.getDefaults();

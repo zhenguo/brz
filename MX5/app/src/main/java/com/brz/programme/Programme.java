@@ -11,6 +11,9 @@ public class Programme {
     private String status;
     private String fileSigna;
 
+    private String url;
+    private String signa;
+
     public String getName() {
         return name;
     }
@@ -38,5 +41,13 @@ public class Programme {
                 + " size: " + size
                 + " fileSigna: " + fileSigna
                 + " status: " + status;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public String getSigna() {
+        return signa;
     }
 }
