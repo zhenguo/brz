@@ -64,8 +64,6 @@ public class SignalService extends Service {
             break;
           case MSG_GET_CONFIG:
             mConfig = TerminalConfigManager.getInstance().getTerminalConfig();
-            mConfig.setFileServer("");
-            mConfig.setHttpServer("");
 
             if (TextUtils.isEmpty(mConfig.getTermId())) {
               mHandler.sendEmptyMessage(MSG_GET_TERMINAL_ID);
@@ -75,7 +73,7 @@ public class SignalService extends Service {
 
             break;
           case MSG_UPDATE_CONFIG:
-            TerminalConfigManager.getInstance().updateTerminalConfig(mConfig);
+            TerminalConfigManager.getInstance().updateTerminalConfig();
             break;
           default:
             break;

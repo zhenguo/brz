@@ -1,5 +1,6 @@
 package com.brz.utils;
 
+import android.text.TextUtils;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -10,34 +11,37 @@ import java.io.IOException;
  */
 public class FileUtil {
 
-    /**
-     * Read Content from file
-     * @param path the path of file
-     * @return the content of file
-     */
-    public static String readFile(String path) {
-        File file = new File(path);
-        BufferedReader reader = null;
-        StringBuilder builder = new StringBuilder();
+  public static String getFileName(String url) {
+    return TextUtils.isEmpty(url) ? null : url.substring(url.lastIndexOf('/') + 1);
+  }
 
-        try {
-            reader = new BufferedReader(new FileReader(file));
-            String tempString;
-            while ((tempString = reader.readLine()) != null) {
-                builder.append(tempString);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (reader != null)
-                    reader.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+  /**
+   * Read Content from file
+   *
+   * @param path the path of file
+   * @return the content of file
+   */
+  public static String readFile(String path) {
+    File file = new File(path);
+    BufferedReader reader = null;
+    StringBuilder builder = new StringBuilder();
 
-        return builder.toString();
+    try {
+      reader = new BufferedReader(new FileReader(file));
+      String tempString;
+      while ((tempString = reader.readLine()) != null) {
+        builder.append(tempString);
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        if (reader != null) reader.close();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
     }
 
+    return builder.toString();
+  }
 }

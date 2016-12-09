@@ -15,9 +15,14 @@ import java.io.IOException;
 public class TerminalConfigManager {
 
   private static final String TAG = "TerminalConfigManager";
+  private TerminalConfig mConfig;
 
   private static class SingletonHolder {
     private static TerminalConfigManager instance = new TerminalConfigManager();
+  }
+
+  private TerminalConfigManager() {
+
   }
 
   public static TerminalConfigManager getInstance() {
@@ -25,11 +30,15 @@ public class TerminalConfigManager {
   }
 
   public TerminalConfig getTerminalConfig() {
-    return JsonUtil.fromJson(readFile(Basic.TERMINAL_CONFIG_PATH), TerminalConfig.class);
+    if (mConfig == null) {
+      mConfig = JsonUtil.fromJson(readFile(Basic.TERMINAL_CONFIG_PATH), TerminalConfig.class);
+    }
+
+    return mConfig;
   }
 
-  public void updateTerminalConfig(TerminalConfig config) {
-    writeFile(Basic.TERMINAL_CONFIG_PATH, JsonUtil.toJson(config));
+  public void updateTerminalConfig() {
+    writeFile(Basic.TERMINAL_CONFIG_PATH, JsonUtil.toJson(mConfig));
   }
 
   private void writeFile(String path, String json) {
