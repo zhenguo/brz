@@ -7,7 +7,6 @@ import com.brz.http.bean.Status;
 import java.util.logging.Logger;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -16,6 +15,10 @@ import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Streaming;
 import retrofit2.http.Url;
+import rx.Observable;
+import rx.Subscriber;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by macro on 16/5/16.
@@ -43,7 +46,7 @@ public class TerminalService extends HttpService {
   public interface Terminal {
     @Headers({
         "content-type: application/json"
-    }) @POST("TerminalService/getkey.do") Call<Response> getTerminalId(
+    }) @POST("TerminalService/getkey.do") Observable<Response> getTerminalId(
         @Body RequestBody requestBody);
 
     @POST("TerminalService/transmission.do") Call<Response> postTransmission(
@@ -52,7 +55,7 @@ public class TerminalService extends HttpService {
 
     @Headers({
         "content-type: application/json"
-    }) @POST("TerminalService/heartbeat.do") Call<Response> heartBeat(@Body RequestBody body);
+    }) @POST("TerminalService/heartbeat.do") Observable<Response> heartBeat(@Body RequestBody body);
 
     @FormUrlEncoded @POST("TerminalService/screenshots.do") Call<Void> sendScreenShots(
         @Field("termId") String termId, @Field("cmd") Cmd cmd);
@@ -60,15 +63,21 @@ public class TerminalService extends HttpService {
     @Streaming @GET Call<ResponseBody> downloadFileWithDynamicUrlAsync(@Url String fileUrl);
   }
 
-  public void getTermId(RequestBody requestBody, Callback<Response> callback) {
+  public void getTermId(RequestBody requestBody, Subscriber<String> subscriber) {
     Terminal terminal = mRetrofit.create(Terminal.class);
-    Call<Response> call = terminal.getTerminalId(requestBody);
-    call.enqueue(callback);
+    terminal.getTerminalId(requestBody).map(new Func1<Response, String>() {
+      @Override public String call(Response response) {
+        return response.getCmd().getCmdData().getTermId();
+      }
+    }).subscribeOn(Schedulers.io()).observeOn(Schedulers.immediate()).subscribe(subscriber);
   }
 
-  public void heartBeat(RequestBody requestBody, Callback<Response> callback) {
+  public void heartBeat(RequestBody requestBody, Subscriber<Cmd> subscriber) {
     Terminal terminal = mRetrofit.create(Terminal.class);
-    Call<Response> call = terminal.heartBeat(requestBody);
-    call.enqueue(callback);
+    terminal.heartBeat(requestBody).map(new Func1<Response, Cmd>() {
+      @Override public Cmd call(Response response) {
+        return response.getCmd();
+      }
+    }).observeOn(Schedulers.io()).observeOn(Schedulers.immediate()).subscribe(subscriber);
   }
 }

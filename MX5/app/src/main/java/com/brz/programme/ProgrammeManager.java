@@ -2,7 +2,6 @@ package com.brz.programme;
 
 import com.brz.basic.Basic;
 import com.brz.utils.JsonUtil;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -25,8 +24,8 @@ public class ProgrammeManager {
     return SingletonHolder.instance;
   }
 
-  public Theme getTheme() {
-    return JsonUtil.fromJson(readFile(Basic.THEME_PATH), Theme.class);
+  public Theme getTheme(String themePath) {
+    return JsonUtil.fromJson(readFile(themePath), Theme.class);
   }
 
   public ProgrammeContext getContext(String fileName) {

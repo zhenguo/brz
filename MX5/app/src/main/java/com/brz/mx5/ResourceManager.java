@@ -1,5 +1,6 @@
 package com.brz.mx5;
 
+import com.brz.basic.Basic;
 import com.brz.programme.ProgrammeContext;
 import com.brz.programme.ProgrammeManager;
 import com.brz.programme.Theme;
@@ -43,7 +44,7 @@ public class ResourceManager {
     // 读取节目单信息
     mLogger.info("read programmes info...");
     mProgrammeManager = ProgrammeManager.getInstance();
-    mTheme = mProgrammeManager.getTheme();
+    mTheme = mProgrammeManager.getTheme(Basic.THEME_PATH);
     mLogger.info("theme: " + mTheme.toString());
 
     for (int i = 0; i < mTheme.getDefaults().size(); i++) {

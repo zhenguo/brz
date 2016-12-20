@@ -13,10 +13,8 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 import com.brz.http.bean.Cmd;
-import com.brz.http.bean.CmdData;
 import com.brz.http.bean.Hardware;
 import com.brz.http.bean.RequestBody;
-import com.brz.http.bean.Response;
 import com.brz.http.bean.Status;
 import com.brz.http.bean.SystemState;
 import com.brz.http.service.TerminalService;
@@ -24,8 +22,7 @@ import com.brz.mx5.R;
 import com.brz.system.TerminalConfig;
 import com.brz.system.TerminalConfigManager;
 import com.brz.utils.SystemUtil;
-import retrofit2.Call;
-import retrofit2.Callback;
+import rx.Subscriber;
 
 /**
  * Created by macro on 16/7/18.
@@ -151,35 +148,21 @@ public class SignalService extends Service {
     cmd.setCmdType(CmdType.GET_TERM_ID);
 
     RequestBody body = new RequestBody("", status, cmd);
-    mService.getTermId(body, new Callback<Response>() {
-      @Override public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
-        try {
-          if (response.isSuccessful()) {
-            Response response1 = response.body();
-            if (response1 != null) {
-              Cmd cmd1 = response1.getCmd();
-              if (cmd1 != null) {
-                CmdData cmdData = cmd1.getCmdData();
-                if (cmdData != null) {
-                  String termId = cmdData.getTermId();
-                  Log.d(TAG, "mTermId: " + termId);
-                  mConfig.setTermId(termId);
+    mService.getTermId(body, new Subscriber<String>() {
+      @Override public void onCompleted() {
 
-                  startHeartbeat();
-                  mHandler.sendEmptyMessage(MSG_UPDATE_CONFIG);
-                }
-              }
-            }
-          } else {
-            Log.d(TAG, "error: " + response.raw());
-          }
-        } catch (Exception e) {
-          e.printStackTrace();
-        }
       }
 
-      @Override public void onFailure(Call<Response> call, Throwable t) {
-        t.printStackTrace();
+      @Override public void onError(Throwable e) {
+        e.printStackTrace();
+      }
+
+      @Override public void onNext(String s) {
+        Log.d(TAG, "onNext termId: " + s);
+        mConfig.setTermId(s);
+
+        startHeartbeat();
+        mHandler.sendEmptyMessage(MSG_UPDATE_CONFIG);
       }
     });
   }
@@ -199,26 +182,17 @@ public class SignalService extends Service {
         .setTermId(mConfig.getTermId())
         .build();
 
-    mService.heartBeat(requestBody, new Callback<Response>() {
-      @Override public void onResponse(Call<Response> call, retrofit2.Response<Response> r) {
-        try {
-          if (r.isSuccessful()) {
-            Log.d(TAG, "message: " + r.message());
-            Response response = r.body();
-            if (response != null) {
-              Cmd rCmd = response.getCmd();
-              CmdProcessor.getInstance().process(rCmd);
-            }
-          } else {
-            Log.d(TAG, "error: " + r.raw().toString());
-          }
-        } catch (Exception e) {
-          e.printStackTrace();
-        }
+    mService.heartBeat(requestBody, new Subscriber<Cmd>() {
+      @Override public void onCompleted() {
+
       }
 
-      @Override public void onFailure(Call<Response> call, Throwable t) {
+      @Override public void onError(Throwable e) {
+        e.printStackTrace();
+      }
 
+      @Override public void onNext(Cmd cmd) {
+        CmdProcessor.getInstance().process(cmd);
       }
     });
   }
