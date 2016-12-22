@@ -34,36 +34,10 @@ public class CmdProcessor {
     switch (type) {
       case CmdType.UPDATE_PROGRAMME:
         Theme theme = cmd.getCmdData().getTheme();
-
-        //FileDownloadManager.getInstance()
-        //    .addDownload(fileServ + theme.getUrl(), "theme.temp", new ProgressListener() {
-        //      @Override public void update(long bytesRead, long contentLength, boolean done) {
-        //        Log.d(TAG, "bytesRead: "
-        //            + bytesRead
-        //            + " contentLenght: "
-        //            + contentLength
-        //            + " done: "
-        //            + done);
-        //      }
-        //    });
-
         List<Programme> programmeList = cmd.getCmdData().getPrograms();
+
         new UpdateProgrammeProcessor(theme.getUrl(), programmeList);
-        //for (int i = 0; i < programmeList.size(); i++) {
-        //  Programme programme = programmeList.get(i);
-        //  FileDownloadManager.getInstance()
-        //      .addDownload(fileServ + programme.getUrl(), FileUtil.getFileName(programme.getUrl()),
-        //          new ProgressListener() {
-        //            @Override public void update(long bytesRead, long contentLength, boolean done) {
-        //              Log.d(TAG, "bytesRead: "
-        //                  + bytesRead
-        //                  + " contentLenght: "
-        //                  + contentLength
-        //                  + " done: "
-        //                  + done);
-        //            }
-        //          });
-        //}
+
         break;
       default:
         break;

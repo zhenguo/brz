@@ -125,6 +125,8 @@ public class UpdateProgrammeProcessor {
   private final BaseDownloadTask.FinishListener mFinishListener =
       new BaseDownloadTask.FinishListener() {
         @Override public void over(BaseDownloadTask task) {
+          Log.d(TAG, "over: " + task.getTargetFilePath());
+
           --mQueueSize;
           if (mQueueSize == 0) {
             // all file download finished, start parse and download media
