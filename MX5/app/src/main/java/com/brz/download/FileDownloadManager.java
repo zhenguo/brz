@@ -1,30 +1,40 @@
 package com.brz.download;
 
-import android.util.Log;
+import org.xutils.common.Callback;
+import org.xutils.common.task.PriorityExecutor;
+import org.xutils.http.RequestParams;
+import org.xutils.x;
+
+import java.util.concurrent.Executor;
 
 /**
- * Created by macro on 16/12/8.
+ * Created by macro on 2016/12/22.
  */
 
 public class FileDownloadManager {
+    private Executor mExecutor;
 
-  private static final String TAG = "FileDownloadManager";
+    private static class SingletonHolder {
+        static FileDownloadManager instance = new FileDownloadManager();
+    }
 
-  private static class SingletonHolder {
-    private static FileDownloadManager instance = new FileDownloadManager();
-  }
+    private FileDownloadManager() {
+        mExecutor = new PriorityExecutor(2, true);
+    }
 
-  private FileDownloadManager() {
+    public static FileDownloadManager getInstance() {
+        return SingletonHolder.instance;
+    }
 
-  }
+    public Callback.Cancelable performRequest(String srcUrl, String targetPath, DownloadCallback callback) {
+        RequestParams params = new RequestParams(srcUrl);
+        params.setAutoResume(true);
+        params.setAutoRename(true);
+        params.setSaveFilePath(targetPath);
+        params.setExecutor(mExecutor);
+        params.setCancelFast(true);
+        params.setMaxRetryCount(3);
 
-  public static FileDownloadManager getInstance() {
-    return SingletonHolder.instance;
-  }
-
-  public void addDownload(String url, String targetFileName, ProgressListener listener) {
-    Log.d(TAG, "addDownload: " + url + " targetFileName: " + targetFileName);
-    FileDownloader downloader = new FileDownloader(url, targetFileName, listener);
-    DiskIOExecutor.getInstance().execute(downloader);
-  }
+        return x.http().get(params, callback);
+    }
 }

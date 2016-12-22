@@ -1,9 +1,10 @@
 package com.brz.mx5;
 
 import android.content.Intent;
+
 import com.brz.basic.Basic;
 import com.brz.service.SignalService;
-import com.liulishuo.filedownloader.FileDownloader;
+
 import java.util.logging.Logger;
 
 /**
@@ -19,8 +20,6 @@ public class MX5Application extends BaseApplication {
     super.onCreate();
 
     mInstance = this;
-
-    FileDownloader.init(this);
 
     // 获取屏幕大小
     mLogger.info("get screen configurations...");
