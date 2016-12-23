@@ -9,28 +9,4 @@ import java.io.File;
  */
 
 public abstract class DownloadCallback implements Callback.CommonCallback<File>, Callback.ProgressCallback<File>, Callback.Callable {
-    @Override
-    public void call(Object result) {
-
-    }
-
-    @Override
-    public void onWaiting() {
-
-    }
-
-    @Override
-    public void onStarted() {
-
-    }
-
-    @Override
-    public void onCancelled(CancelledException cex) {
-
-    }
-
-    @Override
-    public void onFinished() {
-
-    }
 }

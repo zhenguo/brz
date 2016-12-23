@@ -10,37 +10,36 @@ import java.util.logging.Logger;
  */
 
 public class ResourceManager {
-    private static final String TAG = "ResourceManager";
+  private static final String TAG = "ResourceManager";
 
-    private static class SingletonHolder {
-        static ResourceManager instance = new ResourceManager();
+  private static class SingletonHolder {
+    static ResourceManager instance = new ResourceManager();
+  }
+
+  private Logger mLogger = Logger.getLogger(TAG);
+  private TerminalConfig mTerminalConfig;
+
+  public static ResourceManager getInstance() {
+    return SingletonHolder.instance;
+  }
+
+  public ResourceManager() {
+
+  }
+
+  public boolean init() {
+    // 读取系统配置
+    mLogger.info("read terminal configurations...");
+    mTerminalConfig = TerminalConfigManager.getInstance().getTerminalConfig();
+    if (mTerminalConfig == null) {
+      return false;
     }
 
-    private Logger mLogger = Logger.getLogger(TAG);
-    private TerminalConfigManager mTerminalConfigManager;
-    private TerminalConfig mTerminalConfig;
+    mLogger.info(mTerminalConfig.toString());
+    return true;
+  }
 
-    public static ResourceManager getInstance() {
-        return SingletonHolder.instance;
-    }
-
-    public ResourceManager() {
-
-    }
-
-    public void init() {
-        // 读取系统配置
-        mLogger.info("read terminal configurations...");
-        mTerminalConfigManager = TerminalConfigManager.getInstance();
-        mTerminalConfig = mTerminalConfigManager.getTerminalConfig();
-        if (mTerminalConfig == null) {
-            return;
-        }
-        mLogger.info(mTerminalConfig.toString());
-    }
-
-    public TerminalConfig getTerminalConfig() {
-        return mTerminalConfig;
-    }
-
+  public TerminalConfig getTerminalConfig() {
+    return mTerminalConfig;
+  }
 }
