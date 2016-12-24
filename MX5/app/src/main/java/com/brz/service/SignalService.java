@@ -1,5 +1,6 @@
 package com.brz.service;
 
+import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -44,10 +45,13 @@ public class SignalService extends Service {
     private static final int DEFAULT_HEARTBEAT_INTERVAL = 3000;
     private static final String EXTRA_PARAM_TERM_ID = "extra_param_term_id";
     private TerminalConfig mConfig;
+    private ActivityManager mManager;
 
     @Override
     public void onCreate() {
         super.onCreate();
+
+        mManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
 
         mService = TerminalService.getInstance();
 
@@ -179,7 +183,7 @@ public class SignalService extends Service {
     }
 
     public void doHeartBeat() {
-        Log.d(TAG, "doHeartBeat");
+        Log.d(TAG, "doHeartBeat: " + mManager.getMemoryClass());
         Status status = new Status();
         status.setSystemState(SystemState.ONLINE.getValue());
 

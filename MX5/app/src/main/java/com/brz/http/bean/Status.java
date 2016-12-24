@@ -8,6 +8,7 @@ public class Status {
     private Hardware hardware;
     private DiskInfo diskInfo;
     private String downloadStatue;
+    private Transmission transmission;
 
     public String getSystemState() {
         return systemState;
@@ -39,5 +40,13 @@ public class Status {
 
     public void setHardware(Hardware hardware) {
         this.hardware = hardware;
+    }
+
+    public Transmission getTransmission() {
+        return transmission;
+    }
+
+    public void setTransmission(Transmission transmission) {
+        this.transmission = transmission;
     }
 }

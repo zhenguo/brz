@@ -18,44 +18,50 @@ import java.util.List;
  */
 
 public class CmdProcessor {
-  private static final String TAG = "CmdProcessor";
-  private Context mContext;
+    private static final String TAG = "CmdProcessor";
+    private Context mContext;
 
-  private static class SingletonHolder {
-    private static CmdProcessor instance = new CmdProcessor();
-  }
+    private CmdProcessor() {
 
-  public static CmdProcessor getInstance() {
-    return SingletonHolder.instance;
-  }
-
-  public void process(Context context, Cmd cmd) {
-    if (cmd == null) return;
-    Log.d(TAG, "cmd: " + cmd.getCmdType());
-    mContext = context;
-
-    String type = cmd.getCmdType();
-    switch (type) {
-      case CmdType.UPDATE_PROGRAMME:
-        Theme theme = cmd.getCmdData().getTheme();
-        List<Programme> programmeList = cmd.getCmdData().getPrograms();
-
-        DownloadResourceRunnable runnable =
-            new DownloadResourceRunnable(theme.getUrl(), programmeList,
-                new DownloadResourceRunnable.DownloadResourceCallback() {
-                  @Override public void onSuccess() {
-                    Intent intent = new Intent(IntentActions.ACTION_UPDATE_PROGRAMME);
-                    LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
-                  }
-
-                  @Override public void onFailure() {
-
-                  }
-                });
-        DiskIOExecutor.getInstance().execute(runnable);
-        break;
-      default:
-        break;
     }
-  }
+
+    private static class SingletonHolder {
+        private static CmdProcessor instance = new CmdProcessor();
+    }
+
+    public static CmdProcessor getInstance() {
+        return SingletonHolder.instance;
+    }
+
+    public void process(Context context, Cmd cmd) {
+        if (cmd == null) return;
+        Log.d(TAG, "cmd: " + cmd.getCmdType());
+        mContext = context;
+
+        String type = cmd.getCmdType();
+        switch (type) {
+            case CmdType.UPDATE_PROGRAMME:
+                Theme theme = cmd.getCmdData().getTheme();
+                List<Programme> programmeList = cmd.getCmdData().getPrograms();
+
+                DownloadResourceRunnable runnable =
+                        new DownloadResourceRunnable(theme.getPublishid(), theme.getUrl(), programmeList,
+                                new DownloadResourceRunnable.DownloadResourceCallback() {
+                                    @Override
+                                    public void onSuccess() {
+                                        Intent intent = new Intent(IntentActions.ACTION_UPDATE_PROGRAMME);
+                                        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
+                                    }
+
+                                    @Override
+                                    public void onFailure() {
+
+                                    }
+                                });
+                DiskIOExecutor.getInstance().execute(runnable);
+                break;
+            default:
+                break;
+        }
+    }
 }

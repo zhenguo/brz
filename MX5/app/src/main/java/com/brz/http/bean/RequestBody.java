@@ -4,6 +4,14 @@ package com.brz.http.bean;
  * Created by macro on 16/7/20.
  */
 public class RequestBody {
+  public String getPublishid() {
+    return publishid;
+  }
+
+  public void setPublishid(String publishid) {
+    this.publishid = publishid;
+  }
+
   public static class Builder {
     private RequestBody out = new RequestBody();
 
@@ -32,6 +40,7 @@ public class RequestBody {
 
   private String termId;
   private Status status;
+  private String publishid;
   private Cmd cmd;
 
   public RequestBody() {

@@ -2,8 +2,8 @@ package com.brz.mx5;
 
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+
 import com.brz.basic.Basic;
 import com.brz.fragment.ProgrammeFragment;
 import com.brz.fragment.ProgrammePresenter;
@@ -12,6 +12,7 @@ import com.brz.programme.Programme;
 import com.brz.programme.ProgrammeContext;
 import com.brz.programme.ProgrammeManager;
 import com.brz.programme.Theme;
+
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -65,7 +66,7 @@ public class DisplayManager implements OnCompletionListener {
       mActivity.getSupportFragmentManager()
           .beginTransaction()
           .replace(R.id.fullscreen_content, mFragment)
-          .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+//          .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
           .commit();
       mActivity.getSupportFragmentManager().executePendingTransactions();
     }
@@ -95,7 +96,7 @@ public class DisplayManager implements OnCompletionListener {
     mActivity.getSupportFragmentManager()
         .beginTransaction()
         .replace(R.id.fullscreen_content, mFragment)
-        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+//        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
         .commit();
     mActivity.getSupportFragmentManager().executePendingTransactions();
   }

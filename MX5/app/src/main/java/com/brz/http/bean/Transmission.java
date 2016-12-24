@@ -7,93 +7,98 @@ import java.util.List;
  */
 public class Transmission {
 
-  private String totalSize;
-  private String completedSize;
-  private String downloadSpeed;
-  private List<Item> files;
+    private String totalSize;
+    private String completedSize;
+    private String downloadSpeed;
+    private List<Item> files;
 
-  public String getTotalSize() {
-    return totalSize;
-  }
-
-  public void setTotalSize(String totalSize) {
-    this.totalSize = totalSize;
-  }
-
-  public String getCompletedSize() {
-    return completedSize;
-  }
-
-  public void setCompletedSize(String completedSize) {
-    this.completedSize = completedSize;
-  }
-
-  public String getDownloadSpeed() {
-    return downloadSpeed;
-  }
-
-  public void setDownloadSpeed(String downloadSpeed) {
-    this.downloadSpeed = downloadSpeed;
-  }
-
-  public List<Item> getFiles() {
-    return files;
-  }
-
-  public void setFiles(List<Item> files) {
-    this.files = files;
-  }
-
-  public static class Item {
-    public static final String STATE_WAITING = "0";
-    public static final String STATE_DOWNLOADING = "1";
-    public static final String STATE_COMPLETE = "2";
-    public static final String STATE_FAILURE = "3";
-
-    private String fileName;
-    private String fileSigna;
-    private String statue;
-    private String fileSize;
-    private String fileCompleted;
-
-    public String getFileName() {
-      return fileName;
+    @Override
+    public String toString() {
+        return "totalSize: " + totalSize + " completeSize: " + completedSize + " files: " + files.size();
     }
 
-    public void setFileName(String fileName) {
-      this.fileName = fileName;
+    public String getTotalSize() {
+        return totalSize;
     }
 
-    public String getFileSigna() {
-      return fileSigna;
+    public void setTotalSize(String totalSize) {
+        this.totalSize = totalSize;
     }
 
-    public void setFileSigna(String fileSigna) {
-      this.fileSigna = fileSigna;
+    public String getCompletedSize() {
+        return completedSize;
     }
 
-    public String getStatue() {
-      return statue;
+    public void setCompletedSize(String completedSize) {
+        this.completedSize = completedSize;
     }
 
-    public void setStatue(String statue) {
-      this.statue = statue;
+    public String getDownloadSpeed() {
+        return downloadSpeed;
     }
 
-    public String getFileSize() {
-      return fileSize;
+    public void setDownloadSpeed(String downloadSpeed) {
+        this.downloadSpeed = downloadSpeed;
     }
 
-    public void setFileSize(String fileSize) {
-      this.fileSize = fileSize;
+    public List<Item> getFiles() {
+        return files;
     }
 
-    public String getFileCompleted() {
-      return fileCompleted;
+    public void setFiles(List<Item> files) {
+        this.files = files;
     }
 
-    public void setFileCompleted(String fileCompleted) {
-      this.fileCompleted = fileCompleted;
+    public static class Item {
+        public static final String STATE_WAITING = "0";
+        public static final String STATE_DOWNLOADING = "1";
+        public static final String STATE_COMPLETE = "2";
+        public static final String STATE_FAILURE = "3";
+
+        private String fileName;
+        private String fileSigna;
+        private String statue;
+        private String fileSize;
+        private String fileCompleted;
+
+        public String getFileName() {
+            return fileName;
+        }
+
+        public void setFileName(String fileName) {
+            this.fileName = fileName;
+        }
+
+        public String getFileSigna() {
+            return fileSigna;
+        }
+
+        public void setFileSigna(String fileSigna) {
+            this.fileSigna = fileSigna;
+        }
+
+        public String getStatue() {
+            return statue;
+        }
+
+        public void setStatue(String statue) {
+            this.statue = statue;
+        }
+
+        public String getFileSize() {
+            return fileSize;
+        }
+
+        public void setFileSize(String fileSize) {
+            this.fileSize = fileSize;
+        }
+
+        public String getFileCompleted() {
+            return fileCompleted;
+        }
+
+        public void setFileCompleted(String fileCompleted) {
+            this.fileCompleted = fileCompleted;
+        }
     }
-  }
 }
