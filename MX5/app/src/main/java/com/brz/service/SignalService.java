@@ -20,7 +20,6 @@ import com.brz.http.bean.RequestBody;
 import com.brz.http.bean.Status;
 import com.brz.http.bean.SystemState;
 import com.brz.http.service.TerminalService;
-import com.brz.mx5.R;
 import com.brz.system.TerminalConfig;
 import com.brz.system.TerminalConfigManager;
 import com.brz.utils.SystemUtil;
@@ -91,7 +90,7 @@ public class SignalService extends Service {
         PendingIntent contentIntent =
                 PendingIntent.getActivity(this, 0, new Intent(this, SignalService.class), 0);
         builder.setContentIntent(contentIntent);
-        builder.setSmallIcon(R.drawable.ic_launcher);
+        builder.setSmallIcon(android.support.v7.appcompat.R.drawable.notification_template_icon_bg);
         builder.setTicker("Foreground SignalService Start");
         builder.setContentTitle("Foreground SignalService");
         builder.setContentText("Make this service run in the foreground.");
@@ -183,7 +182,7 @@ public class SignalService extends Service {
     }
 
     public void doHeartBeat() {
-        Log.d(TAG, "doHeartBeat: " + mManager.getMemoryClass());
+        Log.d(TAG, "doHeartBeat: " + mManager.getLargeMemoryClass());
         Status status = new Status();
         status.setSystemState(SystemState.ONLINE.getValue());
 

@@ -58,10 +58,14 @@ public class FileDownloadManager {
         long totalSize = 0;
         long completeSize = 0;
 
-        for (int i = 0; i < mItems.size(); i++) {
-            Transmission.Item item = mItems.get(i);
-            totalSize += Integer.parseInt(item.getFileSize());
-            completeSize += Integer.parseInt(item.getFileCompleted());
+        try {
+            for (int i = 0; i < mItems.size(); i++) {
+                Transmission.Item item = mItems.get(i);
+                totalSize += Integer.parseInt(item.getFileSize());
+                completeSize += Integer.parseInt(item.getFileCompleted());
+            }
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
         }
 
         mTransmission.setTotalSize(String.valueOf(totalSize));

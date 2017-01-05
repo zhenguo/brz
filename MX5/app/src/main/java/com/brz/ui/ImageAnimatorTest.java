@@ -1,4 +1,4 @@
-package com.brz.view;
+package com.brz.ui;
 
 import android.content.Context;
 import android.graphics.Bitmap;

@@ -1,4 +1,4 @@
-package com.brz.view;
+package com.brz.ui;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -159,7 +159,11 @@ public class ImagePlayer extends SurfaceView {
 							mWidth, mHeight);
 					showPicture(Integer.parseInt(options.getTransmode()));
 					mLogger.info("sleep: " + options.getDuration());
-					sleep(options.getDuration() * 1000); // milliseconds
+					int duration = options.getDuration();
+					if (duration == 0) {
+						duration = 10;
+					}
+					sleep(duration * 1000); // milliseconds
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}

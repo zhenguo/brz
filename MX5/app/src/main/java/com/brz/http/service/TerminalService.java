@@ -70,6 +70,10 @@ public class TerminalService extends HttpService {
         @Streaming
         @GET
         Call<ResponseBody> downloadFileWithDynamicUrlAsync(@Url String fileUrl);
+
+        @Headers({"apikey:810453671c3062282b7e7c8aac09bf1e", "content-type: application/json"})
+        @POST("")
+        Observable<Response> getWeatherInfo();
     }
 
     public void getTermId(RequestBody requestBody, Subscriber<String> subscriber) {
@@ -92,7 +96,7 @@ public class TerminalService extends HttpService {
         }).subscribeOn(Schedulers.io()).observeOn(Schedulers.immediate()).subscribe(subscriber);
     }
 
-    public void postTransmission(RequestBody requestBody, Subscriber<String> subscriber) {
+    public void postTransmission(RequestBody requestBody) {
         Terminal terminal = mRetrofit.create(Terminal.class);
         Call call = terminal.postTransmission(requestBody);
         call.enqueue(new Callback() {

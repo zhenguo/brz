@@ -1,4 +1,4 @@
-package com.brz.view;
+package com.brz.ui;
 
 /**
  * Created by macro on 16/6/8.

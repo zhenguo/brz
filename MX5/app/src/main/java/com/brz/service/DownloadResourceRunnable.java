@@ -1,6 +1,7 @@
 package com.brz.service;
 
 import android.os.Process;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.brz.basic.Basic;
@@ -24,8 +25,6 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CountDownLatch;
-
-import rx.Subscriber;
 
 /**
  * Created by macro on 16/12/9.
@@ -71,6 +70,8 @@ public class DownloadResourceRunnable implements Runnable {
     private List<DownloadInfo> checkMedia() {
         List<DownloadInfo> result = new ArrayList<>();
 
+        String preFileSigna = null;
+
         Theme theme = ProgrammeManager.getInstance().getTheme(Basic.THEME_TEMP_PATH);
         for (int i = 0; i < theme.getDefaults().size(); i++) {
             Programme programme = theme.getDefaults().get(i);
@@ -78,7 +79,7 @@ public class DownloadResourceRunnable implements Runnable {
                     ProgrammeManager.getInstance().getContext(programme.getFileSigna() + ".json");
             List<ProgrammeContext.ContentItem> items = context.getContent();
             for (int j = 0; j < items.size(); j++) {
-                ProgrammeContext.ContentItem item = items.get(i);
+                ProgrammeContext.ContentItem item = items.get(j);
                 List<ProgrammeContext.Item> itemList = item.getRegion().getItem();
                 for (int k = 0; k < itemList.size(); k++) {
 
@@ -87,7 +88,12 @@ public class DownloadResourceRunnable implements Runnable {
                     info.url = itemList.get(k).getUrl();
                     info.fileSigna = itemList.get(k).getFileSigna();
                     info.fileName = itemList.get(k).getSrc();
-                    result.add(info);
+
+//                    Log.d(TAG, "fileSigna: " + info.fileSigna);
+                    if (!TextUtils.equals(info.fileSigna, preFileSigna)) {
+                        result.add(info);
+                        preFileSigna = info.fileSigna;
+                    }
                 }
             }
         }
@@ -198,23 +204,7 @@ public class DownloadResourceRunnable implements Runnable {
         RequestBody body = new RequestBody(ResourceManager.getInstance().getTerminalConfig().getTermId(), status, cmd1);
         body.setPublishid(FileDownloadManager.getInstance().getPublishId());
 
-        TerminalService.getInstance().postTransmission(body, new Subscriber<String>() {
-            @Override
-            public void onCompleted() {
-                Log.d(TAG, "onCompleted: " + CmdType.TRANSMISSIONS);
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                e.printStackTrace();
-            }
-
-            @Override
-            public void onNext(String s) {
-                Log.d(TAG, "onNext: " + CmdType.TRANSMISSIONS);
-            }
-        });
-
+        TerminalService.getInstance().postTransmission(body);
     }
 
     private void downloadMedia() {
@@ -229,7 +219,7 @@ public class DownloadResourceRunnable implements Runnable {
 
             String src = mBaseUrl + info.url;
             String target =
-                    getFilePath(ProgrammeDefine.VIDEO_REGION, info.fileSigna, getFileSuffix(info.fileName));
+                    getFilePath(info.mediaType, info.fileSigna, getFileSuffix(info.fileName));
 
 //            if (new File(target).exists()) {
 //                Log.d(TAG, "skip file: " + target);

@@ -1,4 +1,4 @@
-package com.brz.view;
+package com.brz.ui;
 
 import android.annotation.TargetApi;
 import android.content.Context;
