@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
+import android.graphics.RectF;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
@@ -179,9 +180,11 @@ public class ImagePlayer extends SurfaceView {
 
 		mLogger.info("mode: " + mode);
 
+		RectF rectF = new RectF(getLeft(), getTop(), getRight(), getBottom());
+
 		switch (mode) {
 		case 0:
-			mImageAnimator.nominal(mSurfaceHolder, mCurrentBitmap);
+			mImageAnimator.nominal(mSurfaceHolder, mCurrentBitmap, rectF);
 			break;
 		case 1:
 			mImageAnimator.window_left(mSurfaceHolder, mCurrentBitmap, getWidth(), getHeight());

@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.view.SurfaceHolder;
 
 /**
@@ -18,7 +19,7 @@ public class ImageAnimator {
     private final int leafNum = 20;// 百叶窗均分屏幕条数
     public boolean isRunning = true;
 
-    public void nominal(SurfaceHolder holder, Bitmap bitmap) {
+    public void nominal(SurfaceHolder holder, Bitmap bitmap, RectF dest) {
 
         PaintFlagsDrawFilter pdf = new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG
                 | Paint.FILTER_BITMAP_FLAG);
@@ -37,7 +38,7 @@ public class ImageAnimator {
                 holder.unlockCanvasAndPost(canvas);
                 return;
             }
-            canvas.drawBitmap(bitmap, 0, 0, null);
+            canvas.drawBitmap(bitmap, null, dest, null);
             canvas.restore();
         } catch (Exception e) {
             e.printStackTrace();

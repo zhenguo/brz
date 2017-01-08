@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import com.brz.mx5.R;
@@ -196,11 +197,17 @@ public class MarqueeTextView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
+        Log.d(TAG, "mStep: " + mStep + " mTextWidth: " + mTextWidth);
         canvas.drawText(mText, 0, mText.length(), mStep,
                 getTop() + getHeight() / 2 + mPaint.getTextSize() / 2, mPaint);
         mStep -= mSpeed;
 
-        if (Math.abs(mStep) > getWidth())
-            mStep = getRight();
+        if (mTextWidth > getWidth()) {
+            if (Math.abs(mStep) > mTextWidth)
+                mStep = getRight();
+        } else {
+            if (Math.abs(mStep) > getWidth())
+                mStep = getRight();
+        }
     }
 }

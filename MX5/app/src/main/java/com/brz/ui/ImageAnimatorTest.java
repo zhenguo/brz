@@ -227,7 +227,7 @@ public class ImageAnimatorTest extends SurfaceView {
 
                     switch (mode) {
                         case 0:
-                            imageAnimator.nominal(holder, bitmap);
+                            imageAnimator.nominal(holder, bitmap, null);
                             break;
                         case 1:
                             imageAnimator.window_left(holder, bitmap, mWidth, mHeight);

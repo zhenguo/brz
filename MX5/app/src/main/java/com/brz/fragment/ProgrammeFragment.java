@@ -44,7 +44,7 @@ public class ProgrammeFragment extends BasicFragment implements ProgrammeContrac
 			view.setX(coordinate.getLeft());
 			view.setY(coordinate.getTop());
 			FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-					(int) coordinate.getRight(), (int) coordinate.getButtom());
+					(int) coordinate.getRight(), (int) coordinate.getBottom());
 			mContainer.addView(view, params);
 		}
 	}

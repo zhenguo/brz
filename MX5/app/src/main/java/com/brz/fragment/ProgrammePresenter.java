@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 
 import com.brz.basic.Basic;
@@ -201,6 +202,7 @@ public class ProgrammePresenter implements ProgrammeContract.Presenter, OnComple
     private void inflateVideo(ProgrammeContext.Coordinate coordinate, List<String> videoFiles) {
         VideoPlayer player = (VideoPlayer) View.inflate(mContext, R.layout.view_videoview, null);
         player.setOnCompletionListener(this);
+        Log.d(TAG, "player: " + coordinate.toString());
         mProgrammeView.addView(player, coordinate);
         player.setVideoList(videoFiles);
         mHasVideo = true;

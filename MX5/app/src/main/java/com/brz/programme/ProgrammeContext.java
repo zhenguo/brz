@@ -267,13 +267,18 @@ public class ProgrammeContext implements Serializable {
 		private float left;
 		private float right;
 		private float top;
-		private float buttom;
+		private float bottom;
 
-		public Coordinate(float left, float right, float top, float buttom) {
+		@Override
+		public String toString() {
+			return "left: " + left + " top: " + top + " right: " + right + " bottom: " + bottom;
+		}
+
+		public Coordinate(float left, float right, float top, float bottom) {
 			this.left = left;
 			this.right = right;
 			this.top = top;
-			this.buttom = buttom;
+			this.bottom = bottom;
 		}
 
 		public float getLeft() {
@@ -300,12 +305,12 @@ public class ProgrammeContext implements Serializable {
 			this.top = top;
 		}
 
-		public float getButtom() {
-			return buttom;
+		public float getBottom() {
+			return bottom;
 		}
 
-		public void setButtom(float buttom) {
-			this.buttom = buttom;
+		public void setBottom(float bottom) {
+			this.bottom = bottom;
 		}
 	}
 }
