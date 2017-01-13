@@ -81,6 +81,8 @@ public class DownloadResourceRunnable implements Runnable {
             for (int j = 0; j < items.size(); j++) {
                 ProgrammeContext.ContentItem item = items.get(j);
                 List<ProgrammeContext.Item> itemList = item.getRegion().getItem();
+                if (itemList == null) // 有些region里面不包含item.
+                    continue;
                 for (int k = 0; k < itemList.size(); k++) {
 
                     DownloadInfo info = new DownloadInfo();

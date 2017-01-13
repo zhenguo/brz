@@ -56,6 +56,7 @@ public class SignalService extends Service {
 
         mHandlerThread = new HandlerThread("signal_thread");
         mHandlerThread.start();
+
         mHandler = new Handler(mHandlerThread.getLooper()) {
             @Override
             public void handleMessage(Message msg) {

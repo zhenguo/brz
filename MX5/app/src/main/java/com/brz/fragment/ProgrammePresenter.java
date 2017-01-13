@@ -14,10 +14,11 @@ import com.brz.listener.OnCompletionListener;
 import com.brz.mx5.R;
 import com.brz.programme.ProgrammeContext;
 import com.brz.programme.ProgrammeDefine;
-import com.brz.utils.FileUtil;
+import com.brz.ui.DateView;
 import com.brz.ui.ImagePlayer;
 import com.brz.ui.MarqueeTextView;
 import com.brz.ui.VideoPlayer;
+import com.brz.utils.FileUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -184,10 +185,26 @@ public class ProgrammePresenter implements ProgrammeContract.Presenter, OnComple
                     inflateText(coordinate, optionses);
                     break;
                 case ProgrammeDefine.WEATHER_REGION:
+                    items = region.getItem();
                     break;
                 case ProgrammeDefine.DATE_REGION:
+
+                    coordinate = new ProgrammeContext.Coordinate(
+                            Float.parseFloat(region.getLeft()) * Basic.SCREEN_WIDTH / 100,
+                            Float.parseFloat(region.getWidth()) * Basic.SCREEN_WIDTH / 100,
+                            Float.parseFloat(region.getTop()) * Basic.SCREEN_HEIGHT / 100,
+                            Float.parseFloat(region.getHeight()) * Basic.SCREEN_HEIGHT / 100);
+
+                    inflateDate(coordinate);
                     break;
                 case ProgrammeDefine.TIME_REGION:
+
+                    coordinate = new ProgrammeContext.Coordinate(
+                            Float.parseFloat(region.getLeft()) * Basic.SCREEN_WIDTH / 100,
+                            Float.parseFloat(region.getWidth()) * Basic.SCREEN_WIDTH / 100,
+                            Float.parseFloat(region.getTop()) * Basic.SCREEN_HEIGHT / 100,
+                            Float.parseFloat(region.getHeight()) * Basic.SCREEN_HEIGHT / 100);
+                    inflateTime(coordinate);
                     break;
                 default:
                     break;
@@ -230,6 +247,20 @@ public class ProgrammePresenter implements ProgrammeContract.Presenter, OnComple
         mMarqueeTextView.setBackgroundColor(Color.parseColor(optionses.get(0).getBgcolor()));
         mProgrammeView.addView(mMarqueeTextView, coordinate);
         mMarqueeTextView.startMarquee();
+    }
+
+    private void inflateWeather(ProgrammeContext.Coordinate coordinate) {
+
+    }
+
+    private void inflateDate(ProgrammeContext.Coordinate coordinate) {
+        DateView view = (DateView) View.inflate(mContext, R.layout.view_date, null);
+        mProgrammeView.addView(view, coordinate);
+    }
+
+    private void inflateTime(ProgrammeContext.Coordinate coordinate) {
+        DateView view = (DateView) View.inflate(mContext, R.layout.view_time, null);
+        mProgrammeView.addView(view, coordinate);
     }
 
     private void destoryView() {
