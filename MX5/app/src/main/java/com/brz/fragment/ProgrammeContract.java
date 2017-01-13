@@ -13,6 +13,7 @@ public class ProgrammeContract {
         void addView(android.view.View view, ProgrammeContext.Coordinate coordinate);
         void removeView(android.view.View view);
         void setBackground(String url);
+        void removeAllViews();
     }
 
     interface Presenter extends BasePresenter {

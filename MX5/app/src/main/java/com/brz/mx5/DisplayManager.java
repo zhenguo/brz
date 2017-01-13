@@ -28,6 +28,7 @@ public class DisplayManager implements OnCompletionListener {
   private ProgrammePresenter mPresenter;
   private List<Programme> mProgrammeList;
   private int mPosition = 0;
+
   private static final int MSG_WHAT_SWITCH_PROGRAMME = 0x1000;
   private Handler mHandler = new Handler(new Handler.Callback() {
     @Override public boolean handleMessage(Message msg) {

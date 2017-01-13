@@ -5,13 +5,19 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
 import android.graphics.RectF;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Message;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.brz.imageloader.ImageResizer2;
+import com.brz.imageloader.ImageWorker2;
 import com.brz.listener.OnCompletionListener;
-import com.brz.utils.BitmapUtil;
+import com.brz.mx5.FullscreenActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,195 +30,205 @@ import java.util.logging.Logger;
  */
 public class ImagePlayer extends SurfaceView {
 
-	private static final String TAG = "ImagePlayer";
-	private Logger mLogger = Logger.getLogger(TAG);
+    private static final String TAG = "ImagePlayer";
+    private Logger mLogger = Logger.getLogger(TAG);
+    private ImageResizer2 mImageResizer2;
+    private Bitmap mCurrentBitmap;
 
-	public static class ImageOptions {
-		private String filePath;
-		private String transmode;
-		private double transittime;
-		private int duration;
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
 
-		public String getFilePath() {
-			return filePath;
-		}
+            try {
+                if (mImageOptionsBlockingDeque.isEmpty()) {
+                    if (mOnCompletionListener != null) {
+                        if (!mOnCompletionListener.onCompletion(OnCompletionListener.LEVEL_IMAGE)) {
+                            inflateQueue();
+                        } else {
+                            mLogger.info("time to switch to next programme.");
+                            return;
+                        }
+                    }
+                }
 
-		public String getTransmode() {
-			return transmode;
-		}
+                final ImageOptions options = mImageOptionsBlockingDeque.take();
 
-		public void setTransmode(String transmode) {
-			this.transmode = transmode;
-		}
+                mImageResizer2.loadImage(options.filePath, new ImageWorker2.OnImageLoadedListener() {
+                    @Override
+                    public void onImageLoaded(boolean success, BitmapDrawable drawable) {
+                        mCurrentBitmap = drawable.getBitmap();
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                            Log.d(TAG, "mCurrentBitmap: " + mCurrentBitmap.getAllocationByteCount() / 1024);
+                        } else {
+                            Log.d(TAG, "mCurrentBitmap: " + mCurrentBitmap.getByteCount() / 1024);
+                        }
 
-		public void setFilePath(String filePath) {
-			this.filePath = filePath;
-		}
+                        showPicture(Integer.parseInt(options.getTransmode()));
+//                    mLogger.info("sleep: " + options.getDuration());
+                        int duration = options.getDuration();
+                        if (duration == 0) {
+                            duration = 10;
+                        }
+                        mHandler.sendEmptyMessageDelayed(0, duration * 1000);
+                    }
+                });
 
-		public double getTransittime() {
-			return transittime;
-		}
 
-		public void setTransittime(double transittime) {
-			this.transittime = transittime;
-		}
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    };
 
-		public int getDuration() {
-			return duration;
-		}
+    public static class ImageOptions {
+        private String filePath;
+        private String transmode;
+        private double transittime;
+        private int duration;
 
-		public void setDuration(int duration) {
-			this.duration = duration;
-		}
-	}
+        public String getFilePath() {
+            return filePath;
+        }
 
-	private int mWidth;
-	private int mHeight;
-	private List<ImageOptions> mImages = new ArrayList<>();
-	private BlockingDeque<ImageOptions> mImageOptionsBlockingDeque = new LinkedBlockingDeque<>();
-	private Bitmap mCurrentBitmap;
-	private boolean mQuit;
-	private ImageAnimator mImageAnimator = new ImageAnimator();
-	private OnCompletionListener mOnCompletionListener;
-	private SurfaceHolder mSurfaceHolder;
-	private SurfaceHolder.Callback mCallback = new SurfaceHolder.Callback() {
-		@Override
-		public void surfaceCreated(SurfaceHolder holder) {
-			mSurfaceHolder = holder;
-		}
+        public String getTransmode() {
+            return transmode;
+        }
 
-		@Override
-		public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-			mWidth = width;
-			mHeight = height;
-			mThread.start();
-		}
+        public void setTransmode(String transmode) {
+            this.transmode = transmode;
+        }
 
-		@Override
-		public void surfaceDestroyed(SurfaceHolder holder) {
-			mLogger.info("surfaceDestroyed");
-		}
-	};
+        public void setFilePath(String filePath) {
+            this.filePath = filePath;
+        }
 
-	public void setOnCompletionListener(OnCompletionListener listener) {
-		mOnCompletionListener = listener;
-	}
+        public double getTransittime() {
+            return transittime;
+        }
 
-	public ImagePlayer(Context context) {
-		super(context);
-		init();
-	}
+        public void setTransittime(double transittime) {
+            this.transittime = transittime;
+        }
 
-	public ImagePlayer(Context context, AttributeSet attrs) {
-		super(context, attrs);
-		init();
-	}
+        public int getDuration() {
+            return duration;
+        }
 
-	public ImagePlayer(Context context, AttributeSet attrs, int defStyleAttr) {
-		super(context, attrs, defStyleAttr);
-		init();
-	}
+        public void setDuration(int duration) {
+            this.duration = duration;
+        }
+    }
 
-	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
-	public ImagePlayer(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-		super(context, attrs, defStyleAttr, defStyleRes);
-		init();
-	}
+    private List<ImageOptions> mImages = new ArrayList<>();
+    private BlockingDeque<ImageOptions> mImageOptionsBlockingDeque = new LinkedBlockingDeque<>();
+    private ImageAnimator mImageAnimator = new ImageAnimator();
+    private OnCompletionListener mOnCompletionListener;
+    private SurfaceHolder mSurfaceHolder;
+    private SurfaceHolder.Callback mCallback = new SurfaceHolder.Callback() {
+        @Override
+        public void surfaceCreated(SurfaceHolder holder) {
+            mSurfaceHolder = holder;
+        }
 
-	private void inflateQueue() {
-		for (int i = 0; i < mImages.size(); i++) {
-			mImageOptionsBlockingDeque.add(mImages.get(i));
-		}
-	}
+        @Override
+        public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+            mImageResizer2.setImageSize(width, height);
+            mHandler.sendEmptyMessage(0);
+        }
 
-	public void setImages(List<ImageOptions> images) {
-		mImages = images;
-		inflateQueue();
-	}
+        @Override
+        public void surfaceDestroyed(SurfaceHolder holder) {
+            mLogger.info("surfaceDestroyed");
+        }
+    };
 
-	private void init() {
-		mSurfaceHolder = getHolder();
-		mSurfaceHolder.setFormat(PixelFormat.TRANSLUCENT);
-		mSurfaceHolder.addCallback(mCallback);
-	}
+    public void setOnCompletionListener(OnCompletionListener listener) {
+        mOnCompletionListener = listener;
+    }
 
-	private Thread mThread = new Thread("show_picture") {
-		@Override
-		public void run() {
-			super.run();
-			while (true) {
-				if (mQuit)
-					break;
-				try {
-					if (mImageOptionsBlockingDeque.isEmpty()) {
-						if (mOnCompletionListener != null) {
-							if (!mOnCompletionListener.onCompletion(OnCompletionListener.LEVEL_IMAGE)) {
-								inflateQueue();
-							} else {
-								mLogger.info("time to switch to next programme.");
-								break;
-							}
-						}
-					}
+    public ImagePlayer(Context context) {
+        super(context);
+        init();
+    }
 
-					ImageOptions options = mImageOptionsBlockingDeque.take();
-					mCurrentBitmap = BitmapUtil.decodeSampledBitmapFromFile(options.filePath,
-							mWidth, mHeight);
-					showPicture(Integer.parseInt(options.getTransmode()));
-					mLogger.info("sleep: " + options.getDuration());
-					int duration = options.getDuration();
-					if (duration == 0) {
-						duration = 10;
-					}
-					sleep(duration * 1000); // milliseconds
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	};
+    public ImagePlayer(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init();
+    }
 
-	public void quit() {
-		mQuit = true;
-	}
+    public ImagePlayer(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        init();
+    }
 
-	private void showPicture(int mode) {
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public ImagePlayer(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+        init();
+    }
 
-		mLogger.info("mode: " + mode);
+    private void inflateQueue() {
+        for (int i = 0; i < mImages.size(); i++) {
+            mImageOptionsBlockingDeque.add(mImages.get(i));
+        }
+    }
 
-		RectF rectF = new RectF(getLeft(), getTop(), getRight(), getBottom());
+    public void setImages(List<ImageOptions> images) {
+        mImages = images;
+        inflateQueue();
+    }
 
-		switch (mode) {
-		case 0:
-			mImageAnimator.nominal(mSurfaceHolder, mCurrentBitmap, rectF);
-			break;
-		case 1:
-			mImageAnimator.window_left(mSurfaceHolder, mCurrentBitmap, getWidth(), getHeight());
-			break;
-		case 2:
-			mImageAnimator.window_right(mSurfaceHolder, mCurrentBitmap, getWidth(), getHeight());
-			break;
-		case 3:
-			mImageAnimator.window_down(mSurfaceHolder, mCurrentBitmap, getWidth(), getHeight());
-			break;
-		case 4:
-			mImageAnimator.window_up(mSurfaceHolder, mCurrentBitmap, getWidth(), getHeight());
-			break;
-		case 5:
-			mImageAnimator.black_away(mSurfaceHolder, mCurrentBitmap, getWidth(), getHeight());
-			break;
-		case 6:
-			mImageAnimator.black_in(mSurfaceHolder, mCurrentBitmap, getWidth(), getHeight());
-			break;
-		case 7:
-			mImageAnimator.clean_left(mSurfaceHolder, mCurrentBitmap, getWidth(), getHeight());
-			break;
-		case 8:
-			mImageAnimator.clean_right(mSurfaceHolder, mCurrentBitmap, getWidth(), getHeight());
-			break;
-		default:
-			break;
+    private void init() {
+        mImageResizer2 = FullscreenActivity.getIntance().getImageLoader();
 
-		}
-	}
+        mSurfaceHolder = getHolder();
+        mSurfaceHolder.setFormat(PixelFormat.TRANSLUCENT);
+        mSurfaceHolder.addCallback(mCallback);
+    }
+
+    public void quit() {
+        mHandler.removeCallbacksAndMessages(null);
+        mCurrentBitmap = null;
+    }
+
+    private void showPicture(int mode) {
+
+//        mLogger.info("mode: " + mode);
+
+        RectF rectF = new RectF(getLeft(), getTop(), getRight(), getBottom());
+
+        switch (mode) {
+            case 0:
+                mImageAnimator.nominal(mSurfaceHolder, mCurrentBitmap, rectF);
+                break;
+            case 1:
+                mImageAnimator.window_left(mSurfaceHolder, mCurrentBitmap, getWidth(), getHeight());
+                break;
+            case 2:
+                mImageAnimator.window_right(mSurfaceHolder, mCurrentBitmap, getWidth(), getHeight());
+                break;
+            case 3:
+                mImageAnimator.window_down(mSurfaceHolder, mCurrentBitmap, getWidth(), getHeight());
+                break;
+            case 4:
+                mImageAnimator.window_up(mSurfaceHolder, mCurrentBitmap, getWidth(), getHeight());
+                break;
+            case 5:
+                mImageAnimator.black_away(mSurfaceHolder, mCurrentBitmap, getWidth(), getHeight());
+                break;
+            case 6:
+                mImageAnimator.black_in(mSurfaceHolder, mCurrentBitmap, getWidth(), getHeight());
+                break;
+            case 7:
+                mImageAnimator.clean_left(mSurfaceHolder, mCurrentBitmap, getWidth(), getHeight());
+                break;
+            case 8:
+                mImageAnimator.clean_right(mSurfaceHolder, mCurrentBitmap, getWidth(), getHeight());
+                break;
+            default:
+                break;
+
+        }
+    }
 }

@@ -282,6 +282,11 @@ public class ProgrammePresenter implements ProgrammeContract.Presenter, OnComple
             mProgrammeView.removeView(mMarqueeTextView);
             mMarqueeTextView = null;
         }
+
+        if (mProgrammeView != null) {
+            mProgrammeView.removeAllViews();
+            mProgrammeView = null;
+        }
     }
 
     @Override

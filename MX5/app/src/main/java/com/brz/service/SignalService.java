@@ -14,6 +14,7 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.brz.basic.Basic;
 import com.brz.http.bean.Cmd;
 import com.brz.http.bean.Hardware;
 import com.brz.http.bean.RequestBody;
@@ -52,8 +53,6 @@ public class SignalService extends Service {
 
         mManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
 
-        mService = TerminalService.getInstance();
-
         mHandlerThread = new HandlerThread("signal_thread");
         mHandlerThread.start();
 
@@ -69,6 +68,10 @@ public class SignalService extends Service {
                         break;
                     case MSG_GET_CONFIG:
                         mConfig = TerminalConfigManager.getInstance().getTerminalConfig();
+                        Basic.HTTP_SERVER = mConfig.getHttpServer();
+                        mService = TerminalService.getInstance();
+
+                        Log.d(TAG, "http: " + Basic.HTTP_SERVER);
 
                         if (TextUtils.isEmpty(mConfig.getTermId())) {
                             mHandler.sendEmptyMessage(MSG_GET_TERMINAL_ID);

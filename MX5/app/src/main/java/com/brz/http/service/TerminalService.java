@@ -1,5 +1,6 @@
 package com.brz.http.service;
 
+import com.brz.basic.Basic;
 import com.brz.http.bean.Cmd;
 import com.brz.http.bean.RequestBody;
 import com.brz.http.bean.Response;
@@ -42,7 +43,7 @@ public class TerminalService extends HttpService {
     }
 
     private TerminalService() {
-        super(HttpService.BSQ_URL);
+        super(Basic.HTTP_SERVER);
     }
 
     public interface Terminal {
