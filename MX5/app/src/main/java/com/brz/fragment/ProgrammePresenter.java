@@ -195,7 +195,16 @@ public class ProgrammePresenter implements ProgrammeContract.Presenter, OnComple
                             Float.parseFloat(region.getTop()) * Basic.SCREEN_HEIGHT / 100,
                             Float.parseFloat(region.getHeight()) * Basic.SCREEN_HEIGHT / 100);
 
-                    inflateDate(coordinate);
+                    DateView.StyleParams params = new DateView.StyleParams();
+                    try {
+                        params.textColor = Color.parseColor(region.getColor());
+                        params.textSize = Integer.parseInt(region.getFont_size());
+                        params.typeface = getTypeface(Integer.parseInt(region.getFamily()));
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
+
+                    inflateDate(coordinate, params);
                     break;
                 case ProgrammeDefine.TIME_REGION:
 
@@ -204,11 +213,39 @@ public class ProgrammePresenter implements ProgrammeContract.Presenter, OnComple
                             Float.parseFloat(region.getWidth()) * Basic.SCREEN_WIDTH / 100,
                             Float.parseFloat(region.getTop()) * Basic.SCREEN_HEIGHT / 100,
                             Float.parseFloat(region.getHeight()) * Basic.SCREEN_HEIGHT / 100);
-                    inflateTime(coordinate);
+
+                    params = new DateView.StyleParams();
+
+                    try {
+                        params.textColor = Color.parseColor(region.getColor());
+                        params.textSize = Integer.parseInt(region.getFont_size());
+                        params.typeface = getTypeface(Integer.parseInt(region.getFamily()));
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
+
+                    inflateTime(coordinate, params);
                     break;
                 default:
                     break;
             }
+        }
+    }
+
+    private Typeface getTypeface(int index) {
+        switch (index) {
+            case 0:
+                return Typeface.DEFAULT;
+            case 1:
+                return Typeface.DEFAULT_BOLD;
+            case 2:
+                return Typeface.SANS_SERIF;
+            case 3:
+                return Typeface.SERIF;
+            case 4:
+                return Typeface.MONOSPACE;
+            default:
+                return Typeface.DEFAULT;
         }
     }
 
@@ -253,13 +290,15 @@ public class ProgrammePresenter implements ProgrammeContract.Presenter, OnComple
 
     }
 
-    private void inflateDate(ProgrammeContext.Coordinate coordinate) {
+    private void inflateDate(ProgrammeContext.Coordinate coordinate, DateView.StyleParams params) {
         DateView view = (DateView) View.inflate(mContext, R.layout.view_date, null);
+        view.setStyleParams(params);
         mProgrammeView.addView(view, coordinate);
     }
 
-    private void inflateTime(ProgrammeContext.Coordinate coordinate) {
+    private void inflateTime(ProgrammeContext.Coordinate coordinate, DateView.StyleParams params) {
         DateView view = (DateView) View.inflate(mContext, R.layout.view_time, null);
+        view.setStyleParams(params);
         mProgrammeView.addView(view, coordinate);
     }
 
@@ -267,25 +306,17 @@ public class ProgrammePresenter implements ProgrammeContract.Presenter, OnComple
 
         if (mVideoPlayer != null) {
             mVideoPlayer.stopPlayback();
-            mProgrammeView.removeView(mVideoPlayer);
             mVideoPlayer = null;
         }
 
         if (mImagePlayer != null) {
             mImagePlayer.quit();
-            mProgrammeView.removeView(mImagePlayer);
             mImagePlayer = null;
         }
 
         if (mMarqueeTextView != null) {
             mMarqueeTextView.stopMarquee();
-            mProgrammeView.removeView(mMarqueeTextView);
             mMarqueeTextView = null;
-        }
-
-        if (mProgrammeView != null) {
-            mProgrammeView.removeAllViews();
-            mProgrammeView = null;
         }
     }
 

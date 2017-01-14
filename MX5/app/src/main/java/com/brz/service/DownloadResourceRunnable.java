@@ -223,11 +223,11 @@ public class DownloadResourceRunnable implements Runnable {
             String target =
                     getFilePath(info.mediaType, info.fileSigna, getFileSuffix(info.fileName));
 
-//            if (new File(target).exists()) {
-//                Log.d(TAG, "skip file: " + target);
-//                latch.countDown();
-//                continue;
-//            }
+            if (new File(target).exists()) {
+                Log.d(TAG, "skip file: " + target);
+                latch.countDown();
+                continue;
+            }
 
             FileDownloadManager.getInstance()
                     .performRequest(src, target, new FileDownloadManager.Response() {

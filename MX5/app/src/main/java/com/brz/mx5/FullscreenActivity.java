@@ -68,7 +68,7 @@ public class FullscreenActivity extends PermissionsActivity {
     public ImageResizer2 getImageLoader() {
         if (mImageResizer2 == null) {
             mImageResizer2 = new ImageResizer2(this, DEFAULT_IMAGE_WIDTH, DEFAULT_IMAGE_HEIGHT);
-            mImageResizer2.addImageCache(getSupportFragmentManager(), new ImageCache.ImageCacheParams(this, "pictures"));
+            mImageResizer2.addImageCache(getSupportFragmentManager(), new ImageCache.ImageCacheParams(this, "image_disk_cache"));
         }
 
         return mImageResizer2;

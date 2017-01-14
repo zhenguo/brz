@@ -4,11 +4,13 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import com.brz.basic.Basic;
 import com.brz.basic.BasicFragment;
 import com.brz.imageloader.ImageWorker2;
 import com.brz.mx5.FullscreenActivity;
@@ -21,7 +23,7 @@ import java.util.logging.Logger;
  * Created by macro on 16/3/29.
  */
 public class ProgrammeFragment extends BasicFragment implements ProgrammeContract.View {
-
+    private static final String TAG = "ProgrammeFragment";
     private Logger mLogger = Logger.getLogger(ProgrammeFragment.class.getSimpleName());
     private FrameLayout mContainer;
     private ProgrammeContract.Presenter mProgrammePresenter;
@@ -66,6 +68,7 @@ public class ProgrammeFragment extends BasicFragment implements ProgrammeContrac
             if (TextUtils.isEmpty(url)) {
                 mContainer.setBackground(null);
             } else {
+                FullscreenActivity.getIntance().getImageLoader().setImageSize(Basic.SCREEN_WIDTH, Basic.SCREEN_HEIGHT);
                 FullscreenActivity.getIntance().getImageLoader().loadImage(url, new ImageWorker2.OnImageLoadedListener() {
                     @Override
                     public void onImageLoaded(boolean success, BitmapDrawable bitmap) {
@@ -78,7 +81,11 @@ public class ProgrammeFragment extends BasicFragment implements ProgrammeContrac
     }
 
     @Override
-    public void removeAllViews() {
+    public void onDestroy() {
+        super.onDestroy();
+
+        Log.d(TAG, "onDestroy");
+
         if (mContainer != null) {
             mContainer.setBackground(null);
             mContainer.removeAllViews();

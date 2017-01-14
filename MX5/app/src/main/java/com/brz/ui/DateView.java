@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -31,6 +32,20 @@ public class DateView extends TextView {
     private int mType;
     private static final String TAG = "DateView";
     private TimeChangedReceiver mReceiver;
+    private StyleParams mStyleParams;
+
+    public static class StyleParams {
+
+        public StyleParams() {
+            textColor = Color.WHITE;
+            textSize = 25;
+            typeface = Typeface.MONOSPACE;
+        }
+
+        public int textColor;
+        public int textSize;
+        public Typeface typeface;
+    }
 
     public DateView(Context context) {
         super(context);
@@ -82,14 +97,20 @@ public class DateView extends TextView {
 
     private void initUI() {
         setGravity(Gravity.CENTER);
-        setTextColor(Color.WHITE);
-        setTextSize(24);
 
         mReceiver = new TimeChangedReceiver();
         IntentFilter filter = new IntentFilter(Intent.ACTION_TIME_TICK);
         getContext().registerReceiver(mReceiver, filter);
 
         setDisplay();
+    }
+
+    public void setStyleParams(StyleParams params) {
+        mStyleParams = params;
+
+        setTextColor(mStyleParams.textColor);
+        setTextSize(mStyleParams.textSize);
+        setTypeface(mStyleParams.typeface);
     }
 
     @Override
