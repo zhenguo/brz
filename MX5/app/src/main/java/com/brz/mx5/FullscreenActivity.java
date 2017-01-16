@@ -15,20 +15,15 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
-import com.baidu.apistore.sdk.ApiStoreSDK;
 import com.brz.basic.IntentActions;
 import com.brz.imageloader.ImageCache;
 import com.brz.imageloader.ImageResizer2;
-import com.brz.service.UpdateWeather;
-import com.brz.ui.WeatherView;
 
 public class FullscreenActivity extends PermissionsActivity {
     private static final String TAG = "FullscreenActivity";
 
     private final static int DEFAULT_IMAGE_WIDTH = 640;
     private final static int DEFAULT_IMAGE_HEIGHT = 480;
-
-    private Thread update_weather;
 
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -83,11 +78,6 @@ public class FullscreenActivity extends PermissionsActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fullscreen);
-
-        /*
-        *       启动 天气view
-        *       update_weather = new Thread(new UpdateWeather(findViewById(R.id.weather_view))).start();
-        **/
 
         mInstance = this;
 

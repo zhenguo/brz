@@ -18,6 +18,7 @@ import com.brz.ui.DateView;
 import com.brz.ui.ImagePlayer;
 import com.brz.ui.MarqueeTextView;
 import com.brz.ui.VideoPlayer;
+import com.brz.ui.WeatherView;
 import com.brz.utils.FileUtil;
 
 import java.util.ArrayList;
@@ -186,6 +187,13 @@ public class ProgrammePresenter implements ProgrammeContract.Presenter, OnComple
                     break;
                 case ProgrammeDefine.WEATHER_REGION:
                     items = region.getItem();
+
+                    coordinate = new ProgrammeContext.Coordinate(
+                            Float.parseFloat(region.getLeft()) * Basic.SCREEN_WIDTH / 100,
+                            Float.parseFloat(region.getWidth()) * Basic.SCREEN_WIDTH / 100,
+                            Float.parseFloat(region.getTop()) * Basic.SCREEN_HEIGHT / 100,
+                            Float.parseFloat(region.getHeight()) * Basic.SCREEN_HEIGHT / 100);
+                    inflateWeather(coordinate);
                     break;
                 case ProgrammeDefine.DATE_REGION:
 
@@ -287,7 +295,9 @@ public class ProgrammePresenter implements ProgrammeContract.Presenter, OnComple
     }
 
     private void inflateWeather(ProgrammeContext.Coordinate coordinate) {
-
+        WeatherView view = (WeatherView) View.inflate(mContext, R.layout.view_weather, null);
+        view.setCityName("北京");
+        mProgrammeView.addView(view, coordinate);
     }
 
     private void inflateDate(ProgrammeContext.Coordinate coordinate, DateView.StyleParams params) {

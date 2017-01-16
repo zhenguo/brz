@@ -1,10 +1,11 @@
 package com.brz.ui;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -31,23 +32,32 @@ public class WeatherView extends RelativeLayout{
     private String url = "http://apis.baidu.com/heweather/pro/weather";
     private String cityName;
 
+    private Handler mHandler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+            RefreshWeather(cityName);
+            mHandler.sendEmptyMessageDelayed(0, 10 * 1000);
+            return false;
+        }
+    });
+
     public WeatherView(Context context) {
         super(context);
-        LayoutInflater.from(context).inflate(R.layout.view_weather,this);
+        LayoutInflater.from(context).inflate(R.layout.layout_weather,this);
 
         InitView();
     }
 
     public WeatherView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        LayoutInflater.from(context).inflate(R.layout.view_weather,this);
+        LayoutInflater.from(context).inflate(R.layout.layout_weather,this);
 
         InitView();
     }
 
     public WeatherView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        LayoutInflater.from(context).inflate(R.layout.view_weather,this);
+        LayoutInflater.from(context).inflate(R.layout.layout_weather,this);
 
         InitView();
     }
@@ -65,6 +75,18 @@ public class WeatherView extends RelativeLayout{
         *   根据天气情况设置 天气图标
         *   需要找一组icon
         * */
+    }
+
+    public void setCityName(String name) {
+        cityName = name;
+        mHandler.sendEmptyMessage(0);
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+
+        mHandler.removeCallbacksAndMessages(null);
     }
 
     public void RefreshWeather(String cityName) {   //调用时传入城市名

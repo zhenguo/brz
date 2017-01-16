@@ -8,14 +8,21 @@ android {
     applicationId "com.brz.mx5"
     minSdkVersion 16
     targetSdkVersion 17
-    versionCode 1
-    versionName "1.0"
+    versionCode 1000
+    versionName "1.0.0.1000"
   }
   buildTypes {
     release {
       minifyEnabled false
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
+  }
+}
+
+android.applicationVariants.all { variant ->
+  variant.outputs.each {
+    def file = it.outputFile
+    it.outputFile = new File(file.parent, file.name.replace(".apk", "-${variant.versionName}.apk"))
   }
 }
 
