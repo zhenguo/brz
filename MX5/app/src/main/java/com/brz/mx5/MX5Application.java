@@ -2,6 +2,7 @@ package com.brz.mx5;
 
 import android.content.Intent;
 
+import com.baidu.apistore.sdk.ApiStoreSDK;
 import com.brz.basic.Basic;
 import com.brz.service.SignalService;
 import com.squareup.leakcanary.LeakCanary;
@@ -22,6 +23,8 @@ public class MX5Application extends BaseApplication {
         super.onCreate();
 
         mInstance = this;
+
+        ApiStoreSDK.init(this, "e6b642ccfe83be58357c450c5c5622a2"); //百度apikey
 
         if (LeakCanary.isInAnalyzerProcess(this)) {
             // This process is dedicated to LeakCanary for heap analysis.

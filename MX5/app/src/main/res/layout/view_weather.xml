@@ -1,9 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/reatangle">
 
     <ImageView
+        android:id="@+id/weather_icon"
+        android:layout_width="100dip"
+        android:layout_height="100dip"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="20dp"
+        android:src="@mipmap/weather"/>
+
+    <TextView
+        android:id="@+id/city"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-</LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/weather_icon"
+        android:layout_alignTop="@id/weather_icon"
+        android:layout_marginBottom="10dp"
+        android:textSize="20dp"
+        android:textColor="#000000"
+        android:text="晋中市" />
+
+    <TextView
+        android:id="@+id/weather"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/city"
+        android:layout_toRightOf="@id/weather_icon"
+        android:textColor="#9f9f9f"
+        android:text="晴朗"/>
+
+    <TextView
+        android:id="@+id/advise"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/weather"
+        android:layout_toRightOf="@id/weather_icon"
+        android:textColor="#9f9f9f"
+        android:text="降雪概率: 0%"/>
+
+    <TextView
+        android:id="@+id/temperature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/city"
+        android:textSize="50dp"
+        android:textColor="#000000"
+        android:text="-1"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:id="@+id/temperature_range"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/temperature"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="8dp"
+        android:text="10/-2"/>
+</RelativeLayout>
