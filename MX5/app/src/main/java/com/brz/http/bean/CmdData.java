@@ -12,6 +12,7 @@ public class CmdData {
     private String termId;
     private String error;
     private String errorMessage;
+    private OTAInfo update;
     private byte[] data;
     private Theme theme;
     private List<Programme> programs;
@@ -58,5 +59,9 @@ public class CmdData {
 
     public Theme getTheme() {
         return theme;
+    }
+
+    public OTAInfo getUpdate() {
+        return update;
     }
 }

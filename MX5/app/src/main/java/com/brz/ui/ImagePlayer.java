@@ -194,7 +194,7 @@ public class ImagePlayer extends SurfaceView {
 
     private void showPicture(int mode) {
 
-//        mLogger.info("mode: " + mode);
+        mLogger.info("mode: " + mode);
 
         RectF rectF = new RectF(getLeft(), getTop(), getRight(), getBottom());
 
