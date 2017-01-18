@@ -8,6 +8,7 @@ import android.util.Log;
 import com.brz.basic.IntentActions;
 import com.brz.download.DiskIOExecutor;
 import com.brz.http.bean.Cmd;
+import com.brz.http.bean.OTAInfo;
 import com.brz.programme.Programme;
 import com.brz.programme.Theme;
 
@@ -60,8 +61,15 @@ public class CmdProcessor {
                                 });
                 DiskIOExecutor.getInstance().execute(runnable);
                 break;
+            case CmdType.SET_OTA:
+                OTAInfo otaInfo = cmd.getCmdData().getUpdate();
+                OTAUpdaterRunnable updaterRunnable = new OTAUpdaterRunnable(otaInfo);
+                DiskIOExecutor.getInstance().execute(updaterRunnable);
+                break;
             default:
                 break;
         }
     }
+
+
 }

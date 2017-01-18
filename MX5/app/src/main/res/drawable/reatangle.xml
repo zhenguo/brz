@@ -10,6 +10,11 @@
         android:left="16dp"
         android:right="16dp"/>
 
+    <!-- 边缘线条颜色 -->
+    <stroke
+        android:width="2dp"
+        android:color="#bfbfbf" />
+
     <!-- 圆角的幅度 -->
     <corners
         android:topLeftRadius="16dip"
