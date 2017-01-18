@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.baidu.apistore.sdk.ApiCallBack;
 import com.baidu.apistore.sdk.ApiStoreSDK;
 import com.baidu.apistore.sdk.network.Parameters;
+import com.brz.http.bean.WeatherInfo;
 import com.brz.mx5.R;
 
 import org.json.JSONArray;
@@ -23,11 +24,8 @@ import org.json.JSONObject;
  * Created by macro on 16/6/8.
  */
 public class WeatherView extends RelativeLayout{
-    private ImageView imageView;
-    private TextView city, weather, advise, temperature, temperature_range;
-    private Parameters parameters;
-    private JSONObject jsonObject, jsonResult;
-    private JSONArray jsonArray, jsonArrayResult;
+    private ImageView mImageView;
+    private TextView mCity, mWeather, mAdvise, mTemperature, mTemperature_range;
 
     private String url = "http://apis.baidu.com/heweather/pro/weather";
     private String cityName;
@@ -35,7 +33,7 @@ public class WeatherView extends RelativeLayout{
     private Handler mHandler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
-            RefreshWeather(cityName);
+            refreshWeather(cityName);
             mHandler.sendEmptyMessageDelayed(0, 10 * 1000);
             return false;
         }
@@ -63,11 +61,11 @@ public class WeatherView extends RelativeLayout{
     }
 
     private void InitView() {
-        city = (TextView)findViewById(R.id.city);
-        weather = (TextView)findViewById(R.id.weather);
-        advise = (TextView)findViewById(R.id.advise);
-        temperature = (TextView)findViewById(R.id.temperature);
-        temperature_range = (TextView)findViewById(R.id.temperature_range);
+        mCity = (TextView)findViewById(R.id.city);
+        mWeather = (TextView)findViewById(R.id.weather);
+        mAdvise = (TextView)findViewById(R.id.advise);
+        mTemperature = (TextView)findViewById(R.id.temperature);
+        mTemperature_range = (TextView)findViewById(R.id.temperature_range);
     }
 
     private void ChangeWeatherIcon() {
@@ -89,33 +87,43 @@ public class WeatherView extends RelativeLayout{
         mHandler.removeCallbacksAndMessages(null);
     }
 
-    public void RefreshWeather(String cityName) {   //调用时传入城市名
+    public void refreshWeather(final String cityName) {   //调用时传入城市名
         this.cityName = cityName;
+        final Parameters mParameters = new Parameters();
 
-        parameters = new Parameters();
-        parameters.put("city", cityName);    //这里城市固定
-
-        ApiStoreSDK.execute(url, ApiStoreSDK.GET, parameters, new ApiCallBack() {
+        ApiStoreSDK.execute(url, ApiStoreSDK.GET, mParameters, new ApiCallBack() {
 
             @Override
             public void onSuccess(int i, String s) {
+                JSONObject mJsonObject, mJsonResult;
+                JSONArray mJsonArray, mJsonArrayResult;
+
+                WeatherInfo weatherInfo = new WeatherInfo();
+
+                mParameters.put("city", cityName);    //这里城市固定
+
                 Log.i("ApiStoreSDK", "onSuccess");
 
                 try {
-                    jsonObject = new JSONObject(s);
-                    jsonArray = jsonObject.getJSONArray("HeWeather data service 3.0");
-                    jsonResult = jsonArray.getJSONObject(0);
+                    mJsonObject = new JSONObject(s);
+                    mJsonArray = mJsonObject.getJSONArray("HeWeather data service 3.0");
+                    mJsonResult = mJsonArray.getJSONObject(0);
 
-                    city.setText(jsonResult.getJSONObject("basic").getString("city"));
-                    weather.setText(jsonResult.getJSONObject("now").getJSONObject("cond").getString("txt"));
-                    temperature.setText(jsonResult.getJSONObject("now").getString("tmp") + "°");
-                    advise.setText(jsonResult.getJSONObject("suggestion").getJSONObject("comf").getString("brf"));
+                    weatherInfo.setCity(mJsonResult.getJSONObject("basic").getString("city"));
+                    weatherInfo.setWeather(mJsonResult.getJSONObject("now").getJSONObject("cond").getString("txt"));
+                    weatherInfo.setTemperature(mJsonResult.getJSONObject("now").getString("tmp") + "°");
+                    weatherInfo.setTemperatureRange(mJsonResult.getJSONObject("suggestion").getJSONObject("comf").getString("brf"));
 
-                    jsonArrayResult = jsonResult.getJSONArray("daily_forecast");
-                    jsonResult = jsonArrayResult.getJSONObject(0).getJSONObject("tmp");
+                    mJsonArrayResult = mJsonResult.getJSONArray("daily_forecast");
+                    mJsonResult = mJsonArrayResult.getJSONObject(0).getJSONObject("tmp");
 
-                    temperature_range.setText(jsonResult.getString("max") + "°/" + jsonResult.getString("min") + "°");
+                    weatherInfo.setTemperatureRange(mJsonResult.getString("max") + "°/" + mJsonResult.getString("min") + "°");
 
+                    mTemperature_range.setText(weatherInfo.getTemperatureRange());
+                    mCity.setText(weatherInfo.getCity());
+                    mWeather.setText(weatherInfo.getWeather());
+                    mTemperature.setText(weatherInfo.getTemperature());
+                    mAdvise.setText(weatherInfo.getAdvise());
 
                 }catch (JSONException e) {
                     e.printStackTrace();
