@@ -66,6 +66,10 @@ public class CmdProcessor {
                 OTAUpdaterRunnable updaterRunnable = new OTAUpdaterRunnable(otaInfo);
                 DiskIOExecutor.getInstance().execute(updaterRunnable);
                 break;
+            case CmdType.SHUTDOWN:
+                break;
+            case CmdType.REBOOT:
+                break;
             default:
                 break;
         }
