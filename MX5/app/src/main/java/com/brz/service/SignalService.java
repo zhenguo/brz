@@ -68,15 +68,17 @@ public class SignalService extends Service {
                         break;
                     case MSG_GET_CONFIG:
                         mConfig = TerminalConfigManager.getInstance().getTerminalConfig();
-                        Basic.HTTP_SERVER = mConfig.getHttpServer();
-                        mService = TerminalService.getInstance();
+                        if (mConfig != null) {
+                            Basic.HTTP_SERVER = mConfig.getHttpServer();
+                            mService = TerminalService.getInstance();
 
-                        Log.d(TAG, "http: " + Basic.HTTP_SERVER);
+                            Log.d(TAG, "http: " + Basic.HTTP_SERVER);
 
-                        if (TextUtils.isEmpty(mConfig.getTermId())) {
-                            mHandler.sendEmptyMessage(MSG_GET_TERMINAL_ID);
-                        } else {
-                            startHeartbeat();
+                            if (TextUtils.isEmpty(mConfig.getTermId())) {
+                                mHandler.sendEmptyMessage(MSG_GET_TERMINAL_ID);
+                            } else {
+                                startHeartbeat();
+                            }
                         }
 
                         break;

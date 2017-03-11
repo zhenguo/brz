@@ -2,14 +2,14 @@ apply plugin: 'com.android.application'
 
 android {
   compileSdkVersion 24
-  buildToolsVersion "23.0.3"
+  buildToolsVersion '25.0.0'
 
   defaultConfig {
     applicationId "com.brz.mx5"
     minSdkVersion 16
     targetSdkVersion 17
-    versionCode 1003
-    versionName "1.0.0.1003"
+    versionCode 1005
+    versionName "1.0.0.1005"
   }
   buildTypes {
     release {

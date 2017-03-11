@@ -2,6 +2,8 @@ package com.brz.mx5;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.DialogFragment;
+import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -18,8 +20,9 @@ import android.view.View;
 import com.brz.basic.IntentActions;
 import com.brz.imageloader.ImageCache;
 import com.brz.imageloader.ImageResizer2;
+import com.brz.ui.AuthDialogFragment;
 
-public class FullscreenActivity extends PermissionsActivity {
+public class FullscreenActivity extends PermissionsActivity implements AuthDialogFragment.NoticeDialogListener {
     private static final String TAG = "FullscreenActivity";
 
     private final static int DEFAULT_IMAGE_WIDTH = 640;
@@ -60,6 +63,7 @@ public class FullscreenActivity extends PermissionsActivity {
 
     private ImageResizer2 mImageResizer2;
     private static FullscreenActivity mInstance;
+    private boolean mAllowQuit = false;
 
     public static FullscreenActivity getIntance() {
         return mInstance;
@@ -121,14 +125,34 @@ public class FullscreenActivity extends PermissionsActivity {
     protected void onResume() {
         super.onResume();
 
-        mDisplayManager.display();
+        if (mDisplayManager != null)
+            mDisplayManager.display();
+        else {
+            mContentView.setBackgroundResource(R.drawable.default_bg);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!mAllowQuit) {
+            showAuthDialog();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    private void showAuthDialog() {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        AuthDialogFragment fragment = AuthDialogFragment.newInstance();
+        fragment.show(ft, "AUTH");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
 
-        mDisplayManager.finish();
+        if (mDisplayManager != null)
+            mDisplayManager.finish();
     }
 
     @Override
@@ -152,5 +176,16 @@ public class FullscreenActivity extends PermissionsActivity {
         }
 
         mHideHandler.post(mHidePart2Runnable);
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        mAllowQuit = true;
+        onBackPressed();
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+
     }
 }
