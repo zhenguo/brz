@@ -16,6 +16,7 @@ import android.util.Log;
 
 import com.brz.basic.Basic;
 import com.brz.http.bean.Cmd;
+import com.brz.http.bean.CmdData;
 import com.brz.http.bean.Hardware;
 import com.brz.http.bean.RequestBody;
 import com.brz.http.bean.Status;
@@ -195,7 +196,12 @@ public class SignalService extends Service {
         Cmd cmd = new Cmd();
         cmd.setCmdType(CmdType.HEARTBEAT);
 
-        Log.d(TAG, "TermID: " + mConfig.getTermId());
+        CmdData cmdData = new CmdData();
+        String v = SystemUtil.getVersionName(this);
+        cmdData.setVersion(v);
+        cmd.setCmdData(cmdData);
+
+        Log.d(TAG, "TermID: " + mConfig.getTermId() + " ver: " + v);
 
         RequestBody requestBody = new RequestBody.Builder().setCmd(cmd)
                 .setStatus(status)

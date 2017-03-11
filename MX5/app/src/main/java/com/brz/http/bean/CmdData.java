@@ -10,6 +10,7 @@ import java.util.List;
 public class CmdData {
 
     private String termId;
+    private String versions;
     private String error;
     private String errorMessage;
     private OTAInfo update;
@@ -63,5 +64,13 @@ public class CmdData {
 
     public OTAInfo getUpdate() {
         return update;
+    }
+
+    public String getVersion() {
+        return versions;
+    }
+
+    public void setVersion(String version) {
+        this.versions = version;
     }
 }

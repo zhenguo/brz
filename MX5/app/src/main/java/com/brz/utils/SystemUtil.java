@@ -1,6 +1,8 @@
 package com.brz.utils;
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
@@ -16,6 +18,18 @@ import java.util.Enumeration;
 public class SystemUtil {
 
     private static final String TAG = "SystemUtil";
+
+    public static String getVersionName(Context context) {
+        PackageManager pm = context.getPackageManager();
+        try {
+            PackageInfo info = pm.getPackageInfo(context.getPackageName(), 0);
+            return info.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return "";
+    }
 
     /**
      * translate the MAC address in {@code XX:XX:XX:XX:XX:XX} form to {@code xxxxxxxxxxxx}

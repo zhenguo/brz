@@ -1,4 +1,4 @@
-package com.brz.ui;
+package com.brz.fragment;
 
 import android.app.Activity;
 import android.app.AlertDialog;

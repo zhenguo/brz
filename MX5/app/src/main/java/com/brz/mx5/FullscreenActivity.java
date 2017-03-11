@@ -8,6 +8,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,12 +16,15 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 
+import com.brz.basic.Basic;
 import com.brz.basic.IntentActions;
+import com.brz.fragment.AuthDialogFragment;
+import com.brz.fragment.SettingDialogFragment;
 import com.brz.imageloader.ImageCache;
 import com.brz.imageloader.ImageResizer2;
-import com.brz.ui.AuthDialogFragment;
 
 public class FullscreenActivity extends PermissionsActivity implements AuthDialogFragment.NoticeDialogListener {
     private static final String TAG = "FullscreenActivity";
@@ -64,6 +68,7 @@ public class FullscreenActivity extends PermissionsActivity implements AuthDialo
     private ImageResizer2 mImageResizer2;
     private static FullscreenActivity mInstance;
     private boolean mAllowQuit = false;
+    private Rect mScreenLeft = new Rect(0, Basic.SCREEN_HEIGHT - 200, 200, Basic.SCREEN_HEIGHT);
 
     public static FullscreenActivity getIntance() {
         return mInstance;
@@ -141,10 +146,35 @@ public class FullscreenActivity extends PermissionsActivity implements AuthDialo
         }
     }
 
+    private void showSettingsDialog() {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        SettingDialogFragment sf = SettingDialogFragment.newInstance();
+        sf.show(ft, "SETTINGS");
+    }
+
     private void showAuthDialog() {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         AuthDialogFragment fragment = AuthDialogFragment.newInstance();
         fragment.show(ft, "AUTH");
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                int x = (int) event.getRawX();
+                int y = (int) event.getRawY();
+                Log.d(TAG, "ACTION_DOWN: " + x + " " + y);
+                if (mScreenLeft.contains(x, y)) {
+                    showSettingsDialog();
+                }
+                break;
+            case MotionEvent.ACTION_UP:
+                Log.d(TAG, "ACTION_UP");
+                break;
+        }
+
+        return super.onTouchEvent(event);
     }
 
     @Override

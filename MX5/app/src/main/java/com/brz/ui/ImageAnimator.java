@@ -10,6 +10,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.view.SurfaceHolder;
 
+
 /**
  * Created by zhenhua on 16-4-12.
  */
@@ -20,7 +21,7 @@ public class ImageAnimator {
     public boolean isRunning = true;
 
     public void nominal(SurfaceHolder holder, Bitmap bitmap, RectF dest) {
-
+        Bitmap bitmap1 = Bitmap.createScaledBitmap(bitmap, (int) dest.width(), (int) dest.height(), true);
         PaintFlagsDrawFilter pdf = new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG
                 | Paint.FILTER_BITMAP_FLAG);
         Canvas canvas = new Canvas();
@@ -38,7 +39,7 @@ public class ImageAnimator {
                 holder.unlockCanvasAndPost(canvas);
                 return;
             }
-            canvas.drawBitmap(bitmap, null, dest, null);
+            canvas.drawBitmap(bitmap1, null, dest, null);
             canvas.restore();
         } catch (Exception e) {
             e.printStackTrace();
@@ -52,9 +53,12 @@ public class ImageAnimator {
 
             }
         }
+        bitmap1.recycle();
     }
 
     public void window_left(SurfaceHolder holder, Bitmap bitmap, int maxWidth, int maxHeight) {
+        Bitmap bitmap1 = Bitmap.createScaledBitmap(bitmap, maxWidth, maxHeight, true);
+
         PaintFlagsDrawFilter pdf = new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG
                 | Paint.FILTER_BITMAP_FLAG);
         int dx = (maxWidth - bitmap.getWidth()) / 2;
@@ -85,7 +89,7 @@ public class ImageAnimator {
                 canvas.drawColor(Color.TRANSPARENT, Mode.CLEAR);// 清除画布
 
                 canvas.save();
-                canvas.translate(dx, dy);
+//                canvas.translate(dx, dy);
                 for (int j = 0; j < leafNum; j++) {
                     // src.set(0,
                     // (int)((j+1)*perHeight-((float)runMills/(float)duration)*perHeight),
@@ -106,7 +110,7 @@ public class ImageAnimator {
                         }
                         return;
                     }
-                    canvas.drawBitmap(bitmap, src, dst, null);
+                    canvas.drawBitmap(bitmap1, src, dst, null);
                 }
                 canvas.restore();
 
@@ -123,9 +127,13 @@ public class ImageAnimator {
                 }
             }
         }
+
+        bitmap1.recycle();
     }
 
     public void window_down(SurfaceHolder holder, Bitmap bitmap, int maxWidth, int maxHeight) {
+        Bitmap bitmap1 = Bitmap.createScaledBitmap(bitmap, maxWidth, maxHeight, true);
+
         PaintFlagsDrawFilter pdf = new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG
                 | Paint.FILTER_BITMAP_FLAG);
         int dx = (maxWidth - bitmap.getWidth()) / 2;
@@ -154,7 +162,7 @@ public class ImageAnimator {
                 canvas.drawColor(Color.TRANSPARENT, Mode.CLEAR);// 清除画布
 
                 canvas.save();
-                canvas.translate(dx, dy);
+//                canvas.translate(dx, dy);
                 for (int j = 0; j < leafNum; j++) {
                     src.set(0, (int) ((j + 1) * perHeight - ((float) runMills / (float) duration)
                             * perHeight), maxWidth, (j + 1) * perHeight);
@@ -165,7 +173,7 @@ public class ImageAnimator {
                         }
                         return;
                     }
-                    canvas.drawBitmap(bitmap, src, src, null);
+                    canvas.drawBitmap(bitmap1, src, src, null);
 
                 }
                 canvas.restore();
@@ -184,9 +192,12 @@ public class ImageAnimator {
                 }
             }
         }
+
+        bitmap1.recycle();
     }
 
     public void window_right(SurfaceHolder holder, Bitmap bitmap, int maxWidth, int maxHeight) {
+        Bitmap bitmap1 = Bitmap.createScaledBitmap(bitmap, maxWidth, maxHeight, true);
         PaintFlagsDrawFilter pdf = new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG
                 | Paint.FILTER_BITMAP_FLAG);
         int dx = (maxWidth - bitmap.getWidth()) / 2;
@@ -214,7 +225,7 @@ public class ImageAnimator {
                 canvas.drawColor(Color.TRANSPARENT, Mode.CLEAR);// 娓呴櫎鐢诲竷
 
                 canvas.save();
-                canvas.translate(dx, dy);
+//                canvas.translate(dx, dy);
                 for (int j = 0; j < leafNum; j++) {
                     src.set((int) ((j + 1) * perWidth - ((float) runMills / (float) duration)
                             * perWidth), 0, (j + 1) * perWidth, maxHeight);
@@ -225,7 +236,7 @@ public class ImageAnimator {
                         }
                         return;
                     }
-                    canvas.drawBitmap(bitmap, src, src, null);
+                    canvas.drawBitmap(bitmap1, src, src, null);
                 }
                 canvas.restore();
 
@@ -243,9 +254,11 @@ public class ImageAnimator {
                 }
             }
         }
+        bitmap1.recycle();
     }
 
     public void window_up(SurfaceHolder holder, Bitmap bitmap, int maxWidth, int maxHeight) {
+        Bitmap bitmap1 = Bitmap.createScaledBitmap(bitmap, maxWidth, maxHeight, true);
         PaintFlagsDrawFilter pdf = new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG
                 | Paint.FILTER_BITMAP_FLAG);
         int dx = (maxWidth - bitmap.getWidth()) / 2;
@@ -273,7 +286,7 @@ public class ImageAnimator {
                 canvas.drawColor(Color.TRANSPARENT, Mode.CLEAR);// 娓呴櫎鐢诲竷
 
                 canvas.save();
-                canvas.translate(dx, dy);
+//                canvas.translate(dx, dy);
                 for (int j = 0; j < leafNum; j++) {
                     src.set(0, j * perHeight, maxWidth, j * perHeight
                             + (int) (((float) runMills / (float) duration) * perHeight));
@@ -284,7 +297,7 @@ public class ImageAnimator {
                         }
                         return;
                     }
-                    canvas.drawBitmap(bitmap, src, src, null);
+                    canvas.drawBitmap(bitmap1, src, src, null);
                 }
                 canvas.restore();
 
@@ -302,10 +315,12 @@ public class ImageAnimator {
                 }
             }
         }
+        bitmap1.recycle();
     }
 
     // 向外小黑块
     public void black_away(SurfaceHolder holder, Bitmap bitmap, int maxWidth, int maxHeight) {
+        Bitmap bitmap1 = Bitmap.createScaledBitmap(bitmap, maxWidth, maxHeight, true);
         PaintFlagsDrawFilter pdf = new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG
                 | Paint.FILTER_BITMAP_FLAG);
         int dx = (maxWidth - bitmap.getWidth()) / 2;
@@ -391,7 +406,7 @@ public class ImageAnimator {
                                 }
                                 return;
                             }
-                            canvas.drawBitmap(bitmap, drawRect, drawRect, null);
+                            canvas.drawBitmap(bitmap1, drawRect, drawRect, null);
                         }
                     }
                     canvas.restore();
@@ -410,10 +425,13 @@ public class ImageAnimator {
                 }
             }
         }
+        bitmap1.recycle();
     }
 
     // 向内小黑块
     public void black_in(SurfaceHolder holder, Bitmap bitmap, int maxWidth, int maxHeight) {
+        Bitmap bitmap1 = Bitmap.createScaledBitmap(bitmap, maxWidth, maxHeight, true);
+
         PaintFlagsDrawFilter pdf = new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG
                 | Paint.FILTER_BITMAP_FLAG);
         int dx = (maxWidth - bitmap.getWidth()) / 2;
@@ -474,7 +492,7 @@ public class ImageAnimator {
                     }
                     return;
                 }
-                canvas.drawBitmap(bitmap, dx, dy, null);
+                canvas.drawBitmap(bitmap1, dx, dy, null);
 
                 for (int i = 0; i < array.length; i++) {
                     for (int j = 0; j < array[i].length; j++) {
@@ -501,10 +519,12 @@ public class ImageAnimator {
                 }
             }
         }
+        bitmap1.recycle();
     }
 
     // 从左向右擦除
     public void clean_left(SurfaceHolder holder, Bitmap bitmap, int maxWidth, int maxHeight) {
+        Bitmap bitmap1 = Bitmap.createScaledBitmap(bitmap, maxWidth, maxHeight, true);
         PaintFlagsDrawFilter pdf = new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG
                 | Paint.FILTER_BITMAP_FLAG);
         int Num = 1;
@@ -556,7 +576,7 @@ public class ImageAnimator {
                         }
                         return;
                     }
-                    canvas.drawBitmap(bitmap, src, dst, null);
+                    canvas.drawBitmap(bitmap1, src, dst, null);
                 }
                 canvas.restore();
 
@@ -573,10 +593,12 @@ public class ImageAnimator {
                 }
             }
         }
+        bitmap1.recycle();
     }
 
     // 从右向左擦除
     public void clean_right(SurfaceHolder holder, Bitmap bitmap, int maxWidth, int maxHeight) {
+        Bitmap bitmap1 = Bitmap.createScaledBitmap(bitmap, maxWidth, maxHeight, true);
         PaintFlagsDrawFilter pdf = new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG
                 | Paint.FILTER_BITMAP_FLAG);
         int Num = 1;
@@ -616,7 +638,7 @@ public class ImageAnimator {
                         }
                         return;
                     }
-                    canvas.drawBitmap(bitmap, src, src, null);
+                    canvas.drawBitmap(bitmap1, src, src, null);
                 }
                 canvas.restore();
 
@@ -634,9 +656,11 @@ public class ImageAnimator {
                 }
             }
         }
+        bitmap1.recycle();
     }
 
     public void show_bitmap(SurfaceHolder holder, Bitmap bitmap, int maxWidth, int maxHeight) {
+        Bitmap bitmap1 = Bitmap.createScaledBitmap(bitmap, maxWidth, maxHeight, true);
         PaintFlagsDrawFilter pdf = new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG
                 | Paint.FILTER_BITMAP_FLAG);
         int Num = 1;
@@ -676,7 +700,7 @@ public class ImageAnimator {
                         }
                         return;
                     }
-                    canvas.drawBitmap(bitmap, src, src, null);
+                    canvas.drawBitmap(bitmap1, src, src, null);
                 }
                 canvas.restore();
 
@@ -694,5 +718,6 @@ public class ImageAnimator {
                 }
             }
         }
+        bitmap1.recycle();
     }
 }

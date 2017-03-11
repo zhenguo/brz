@@ -8,8 +8,8 @@ android {
     applicationId "com.brz.mx5"
     minSdkVersion 16
     targetSdkVersion 17
-    versionCode 1005
-    versionName "1.0.0.1005"
+    versionCode 1009
+    versionName "1.0.0.1009"
   }
   buildTypes {
     release {

@@ -67,8 +67,24 @@ public class CmdProcessor {
                 DiskIOExecutor.getInstance().execute(updaterRunnable);
                 break;
             case CmdType.SHUTDOWN:
+                Intent intent = new Intent("android.intent.action.pubds_sleep");
+                mContext.sendBroadcast(intent);
                 break;
             case CmdType.REBOOT:
+                mContext.sendBroadcast(new Intent().setAction("android.intent.action.pubds_reboot "));
+                break;
+            case CmdType.PLAY:
+                mContext.sendBroadcast(new Intent().setAction("android.intent.action.pubds_reboot "));
+                break;
+            case CmdType.SET_FILE_SERVER:
+                String value = new String(cmd.getCmdData().getData());
+                UpdateConfigRunnable ur = new UpdateConfigRunnable(value, UpdateConfigRunnable.FILE);
+                DiskIOExecutor.getInstance().execute(ur);
+                break;
+            case CmdType.SET_HTTP_SERVER:
+                value = new String(cmd.getCmdData().getData());
+                ur = new UpdateConfigRunnable(value, UpdateConfigRunnable.HTTP);
+                DiskIOExecutor.getInstance().execute(ur);
                 break;
             default:
                 break;

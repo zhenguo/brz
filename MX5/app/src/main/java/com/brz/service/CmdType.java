@@ -18,6 +18,7 @@ public class CmdType {
     public static final String SET_SYSTEM_TIME = "5007";
     public static final String SET_VOLUME = "5013";
     public static final String SET_FILE_SERVER = "5029";
+    public static final String SET_HTTP_SERVER = "5030";
     public static final String SET_OTA = "5031";
     public static final String SET_WEATHER_LOCATION = "5032";
     public static final String INTERCEPTOR_PROGRAMME = "5016";
