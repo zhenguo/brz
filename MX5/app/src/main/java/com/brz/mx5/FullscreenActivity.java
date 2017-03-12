@@ -25,6 +25,7 @@ import com.brz.fragment.AuthDialogFragment;
 import com.brz.fragment.SettingDialogFragment;
 import com.brz.imageloader.ImageCache;
 import com.brz.imageloader.ImageResizer2;
+import com.brz.utils.SystemUtil;
 
 public class FullscreenActivity extends PermissionsActivity implements AuthDialogFragment.NoticeDialogListener {
     private static final String TAG = "FullscreenActivity";
@@ -165,7 +166,7 @@ public class FullscreenActivity extends PermissionsActivity implements AuthDialo
                 int x = (int) event.getRawX();
                 int y = (int) event.getRawY();
                 Log.d(TAG, "ACTION_DOWN: " + x + " " + y);
-                if (mScreenLeft.contains(x, y)) {
+                if (mScreenLeft.contains(x, y) && SystemUtil.isSystemLoaded()) {
                     showSettingsDialog();
                 }
                 break;

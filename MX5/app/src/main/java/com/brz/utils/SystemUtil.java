@@ -8,6 +8,8 @@ import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 
+import com.brz.system.TerminalConfigManager;
+
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
@@ -18,6 +20,10 @@ import java.util.Enumeration;
 public class SystemUtil {
 
     private static final String TAG = "SystemUtil";
+
+    public static boolean isSystemLoaded() {
+        return TerminalConfigManager.getInstance().getTerminalConfig() != null;
+    }
 
     public static String getVersionName(Context context) {
         PackageManager pm = context.getPackageManager();
