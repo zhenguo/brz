@@ -66,7 +66,7 @@ public class ProgrammePresenter implements ProgrammeContract.Presenter, OnComple
 
 //    Vitamio.isInitialized(context);
 
-        inflateScreen(mProgrammeContext);
+        inflateScreen(mProgrammeContext, false);
     }
 
     public void setOnCompletionListener(OnCompletionListener listener) {
@@ -99,7 +99,7 @@ public class ProgrammePresenter implements ProgrammeContract.Presenter, OnComple
         return filePath;
     }
 
-    private void inflateScreen(ProgrammeContext programmeContext) {
+    private void inflateScreen(ProgrammeContext programmeContext, boolean configChanged) {
         List<ProgrammeContext.ContentItem> list = programmeContext.getContent();
         ProgrammeContext.ContentItem item;
 
@@ -275,6 +275,8 @@ public class ProgrammePresenter implements ProgrammeContract.Presenter, OnComple
         mImagePlayer = (ImagePlayer) View.inflate(mContext, R.layout.view_imageview, null);
         mImagePlayer.setOnCompletionListener(this);
         mImagePlayer.setImages(pictures);
+        Log.d(TAG, "coordinate: " + coordinate);
+
         mProgrammeView.addView(mImagePlayer, coordinate);
         mHasImg = true;
     }

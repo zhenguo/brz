@@ -14,6 +14,7 @@ import com.brz.download.DiskIOExecutor;
 import com.brz.mx5.R;
 import com.brz.service.UpdateConfigRunnable;
 import com.brz.system.TerminalConfigManager;
+import com.brz.utils.SystemUtil;
 
 /**
  * Created by macro on 2017/3/11.
@@ -45,8 +46,10 @@ public class SettingDialogFragment extends DialogFragment {
         final EditText workId = (EditText) content.findViewById(R.id.workId);
         final EditText httpServer = (EditText) content.findViewById(R.id.httpServer);
 
-        workId.setText(TerminalConfigManager.getInstance().getTerminalConfig().getWorkId());
-        httpServer.setText(TerminalConfigManager.getInstance().getTerminalConfig().getHttpServer());
+        if (SystemUtil.isSystemLoaded()) {
+            workId.setText(TerminalConfigManager.getInstance().getTerminalConfig().getWorkId());
+            httpServer.setText(TerminalConfigManager.getInstance().getTerminalConfig().getHttpServer());
+        }
 
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout

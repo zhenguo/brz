@@ -115,6 +115,10 @@ public class DisplayManager implements OnCompletionListener {
         return false;
     }
 
+    public void onConfigurationChanged() {
+        mHandler.sendEmptyMessage(MSG_WHAT_SWITCH_PROGRAMME);
+    }
+
     public void finish() {
         mHandler.removeMessages(MSG_WHAT_SWITCH_PROGRAMME);
     }

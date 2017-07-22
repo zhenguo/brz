@@ -8,6 +8,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,7 +26,6 @@ import com.brz.fragment.AuthDialogFragment;
 import com.brz.fragment.SettingDialogFragment;
 import com.brz.imageloader.ImageCache;
 import com.brz.imageloader.ImageResizer2;
-import com.brz.utils.SystemUtil;
 
 public class FullscreenActivity extends PermissionsActivity implements AuthDialogFragment.NoticeDialogListener {
     private static final String TAG = "FullscreenActivity";
@@ -91,6 +91,12 @@ public class FullscreenActivity extends PermissionsActivity implements AuthDialo
 
         mInstance = this;
 
+        // 获取屏幕大小
+        Basic.SCREEN_WIDTH = getResources().getDisplayMetrics().widthPixels;
+        Basic.SCREEN_HEIGHT = getResources().getDisplayMetrics().heightPixels;
+        Log.d(TAG, "width: " + Basic.SCREEN_WIDTH);
+        Log.d(TAG, "height: " + Basic.SCREEN_HEIGHT);
+
         mContentView = findViewById(R.id.fullscreen_content);
         hide();
 
@@ -125,6 +131,20 @@ public class FullscreenActivity extends PermissionsActivity implements AuthDialo
             default:
                 break;
         }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        // 获取屏幕大小
+        Basic.SCREEN_WIDTH = getResources().getDisplayMetrics().widthPixels;
+        Basic.SCREEN_HEIGHT = getResources().getDisplayMetrics().heightPixels;
+        Log.d(TAG, "width: " + Basic.SCREEN_WIDTH);
+        Log.d(TAG, "height: " + Basic.SCREEN_HEIGHT);
+
+
+        mDisplayManager.onConfigurationChanged();
     }
 
     @Override
@@ -166,7 +186,7 @@ public class FullscreenActivity extends PermissionsActivity implements AuthDialo
                 int x = (int) event.getRawX();
                 int y = (int) event.getRawY();
                 Log.d(TAG, "ACTION_DOWN: " + x + " " + y);
-                if (mScreenLeft.contains(x, y) && SystemUtil.isSystemLoaded()) {
+                if (mScreenLeft.contains(x, y)) {
                     showSettingsDialog();
                 }
                 break;
